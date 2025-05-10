@@ -22,7 +22,7 @@
     /* Hide browser header/footer */
     @page {
         size: letter portrait;
-        margin: 0.5in;
+        margin: 0.25in;
     }
     
     html {
@@ -187,20 +187,21 @@
 }
 
 .notary-section {
-    margin-top: 3em;
+    margin-top: 2em;
 }
 
 /* Print styles for the legal document */
 .print-view {
     font-family: 'Times New Roman', Times, serif;
-    line-height: 1.5;
-    padding: 1.5in 1in;
-    max-width: 8.5in;
-    margin: 0 auto;
+    line-height: 1.2;
+    padding: 0.5cm; /* Minimal margins */
+    width: 100%;
+    max-width: none;
+    margin: 0;
 }
 
 .print-preview-header {
-    margin-bottom: 20px;
+    margin-bottom: 1em;
     text-align: center;
 }
 
@@ -213,7 +214,7 @@
 
 .document-header {
     display: flex;
-    margin-bottom: 30px;
+    margin-bottom: 1em;
     border-bottom: 1px solid #000;
 }
 
@@ -231,77 +232,81 @@
 
 .header-title {
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 
 .header-value {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     border-bottom: 1px solid #000;
-    padding-bottom: 5px;
+    padding-bottom: 2px;
+    line-height: 1.2;
 }
 
 .legal-header {
     text-align: center;
     font-size: 18pt;
     font-weight: bold;
-    margin-bottom: 10px;
-    margin-top: 20px;
+    margin-bottom: 4px;
+    margin-top: 10px;
 }
 
 .legal-subheader {
     text-align: center;
     font-size: 12pt;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .state-county {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 6px;
+    margin-top: 0;
 }
 
 .before-me {
-    margin-bottom: 20px;
+    margin-bottom: 6px;
+    margin-top: 6px;
 }
 
 .numbered-section {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
 .numbered-section h3 {
     font-size: 12pt;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
 }
 
 .section-content {
-    margin-left: 20px;
+    margin-left: 15px;
+    margin-bottom: 5px;
 }
 
 .signature-section, .notary-section {
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
 .state-county-signature {
     font-weight: normal;
-    margin-bottom: 20px;
-    line-height: 2.5;
+    margin-bottom: 10px;
+    line-height: 1.8;
 }
 
 .signature-line {
     border-bottom: 1px solid black;
     width: 80%;
-    margin: 30px 0 5px;
+    margin: 15px 0 5px;
 }
 
 /* Release of Lien specific styles */
 .release-content {
-    margin: 20px 0;
+    margin: 8px 0;
 }
 
 .know-all {
     font-weight: bold;
     text-align: center;
-    margin: 20px 0;
+    margin: 6px 0;
 }
 
 .indented {

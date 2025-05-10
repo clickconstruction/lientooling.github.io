@@ -306,10 +306,43 @@ document.addEventListener('DOMContentLoaded', function() {
         'release-lien': document.getElementById('release-lien')
     };
 
+    // Store form data when switching tabs
+    let storedFormData = {
+        'mechanics-lien': new FormData(),
+        'release-lien': new FormData()
+    };
+    
+    // Function to save form data before switching tabs
+    function saveFormData(formId) {
+        const form = document.getElementById(formId);
+        if (form) {
+            storedFormData[formId] = new FormData(form);
+        }
+    }
+    
+    // Function to restore form data after switching tabs
+    function restoreFormData(formId) {
+        const form = document.getElementById(formId);
+        if (form && storedFormData[formId]) {
+            const data = storedFormData[formId];
+            
+            // Iterate through all form elements and restore values
+            Array.from(form.elements).forEach(element => {
+                if (element.name && data.has(element.name)) {
+                    element.value = data.get(element.name);
+                }
+            });
+        }
+    }
+    
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const formId = link.getAttribute('data-form');
+            const currentFormId = document.querySelector('.nav-link.active').getAttribute('data-form');
+            
+            // Save current form data before switching
+            saveFormData(currentFormId);
             
             // Update navigation
             navLinks.forEach(l => l.classList.remove('active'));
@@ -319,6 +352,9 @@ document.addEventListener('DOMContentLoaded', function() {
             Object.keys(forms).forEach(key => {
                 forms[key].style.display = key === formId ? 'block' : 'none';
             });
+            
+            // Restore previous form data for the selected form
+            restoreFormData(formId);
             
             // Hide the print view when switching tabs
             const printView = document.getElementById('print-view');
@@ -512,7 +548,7 @@ function createPrintView(form) {
         <div class="print-preview-header no-print">
             <h2>${isLienForm ? "Mechanic's Lien Preview" : "Release of Lien Preview"}</h2>
             <div class="preview-buttons">
-                <button id="edit-form-btn" class="btn btn-secondary">Edit</button>
+                <button id="edit-form-btn" class="btn btn-secondary">Back to Form</button>
                 <button onclick="window.print()" class="btn btn-primary">Print Form</button>
             </div>
         </div>
@@ -654,11 +690,16 @@ function createPrintView(form) {
         <div class="release-content">
             <p class="know-all">KNOW ALL MEN BY THESE PRESENTS:</p>
 
-            <p>That I, <strong>${getValueOrPlaceholder(claimantName, 'Claimant\'s Full Legal Name')}</strong>${companyName ? `, of <strong>${companyName}</strong>` : ''}, the undersigned lien claimant, do hereby acknowledge that the claim and lien filed by me on <strong>${getValueOrPlaceholder(formData.get('payment-date'), 'Date')}</strong>, and recorded in the Official Public Records of <strong>${getValueOrPlaceholder(county, 'Property County')}</strong> County, Texas under Document Number <strong>${getValueOrPlaceholder(formData.get('lien-reference'), 'Document Number')}</strong>, against the property legally described as:</p>
+            <p>That I, <strong>${getValueOrPlaceholder(claimantName, 'Claimant\'s Full Legal Name')}</strong>${companyName ? `, of <strong>${companyName}</strong>` : ''}, the undersigned lien claimant, do hereby acknowledge that the claim and lien filed by me on <strong>${getValueOrPlaceholder(formData.get('payment-date'), 'Date')}</strong>, and recorded in the Official Public Records of <strong>${getValueOrPlaceholder(county, 'Property County')}</strong> County, Texas under Document Number <strong>${getValueOrPlaceholder(formData.get('lien-reference'), 'Document Number')}</strong>, against the property located at:</p>
+
+            <p class="indented"><strong>${getValueOrPlaceholder(formData.get('property-address'), 'Property Address')}</strong><br>
+            <strong>${getValueOrPlaceholder(formData.get('property-city'), 'City')}, ${getValueOrPlaceholder(formData.get('property-state'), 'State')} ${getValueOrPlaceholder(formData.get('property-zip'), 'ZIP')}</strong></p>
+
+            <p>And legally described as:</p>
 
             <p class="indented">${getValueOrPlaceholder(formData.get('property-description'), 'Property Description')}</p>
 
-            <p>and owned by <strong>${getValueOrPlaceholder(ownerName, 'Full Legal Name of Property Owner')}</strong>, has been fully paid and satisfied, and I do hereby release and discharge said lien.</p>
+            <p>has been fully paid and satisfied, and I do hereby release and discharge said lien.</p>
         </div>
 
         <div class="signature-section">
