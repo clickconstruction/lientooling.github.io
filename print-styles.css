@@ -1,0 +1,317 @@
+/* Print-specific styles */
+@media print {
+    .no-print, 
+    .nav, 
+    .nav-pills, 
+    .nav-link,
+    #test-data-btn,
+    .d-flex.justify-content-between.align-items-center,
+    .container > *:not(#print-view),
+    form,
+    .btn-outline-primary,
+    .mb-4:not(#print-view) {
+        display: none !important;
+    }
+    
+    body > .container {
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+    }
+    
+    /* Hide browser header/footer */
+    @page {
+        size: letter portrait;
+        margin: 0.5in;
+    }
+    
+    html {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    /* Remove border around print view */
+    #print-view {
+        border: none !important;
+        background-color: transparent !important;
+        padding: 0 !important;
+    }
+    
+    .print-view {
+        display: block !important;
+        padding: 1.5cm; /* Reduced margins */
+        max-width: 7.5in;
+        margin: 0 auto;
+    }
+
+    body {
+        font-size: 12pt;
+        line-height: 1.5;
+        color: #000;
+        font-family: 'Times New Roman', Times, serif;
+    }
+
+    .container {
+        width: 100%;
+        max-width: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .legal-header {
+        text-align: center;
+        margin-bottom: 2em;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    .legal-subheader {
+        text-align: center;
+        margin-bottom: 2em;
+        font-style: italic;
+    }
+
+    .state-county {
+        text-align: center;
+        margin: 2em 0;
+        font-weight: bold;
+    }
+
+    .before-me {
+        margin: 2em 0;
+        text-align: justify;
+    }
+
+    .numbered-section {
+        margin: 1.5em 0;
+        page-break-inside: avoid;
+    }
+
+    .numbered-section h3 {
+        font-weight: bold;
+        display: inline;
+    }
+
+    .section-content {
+        margin-left: 1.5em;
+    }
+
+    .signature-section {
+        margin-top: 3em;
+        page-break-inside: avoid;
+    }
+
+    .signature-line {
+        border-top: 1px solid black;
+        margin: 2em 0;
+        width: 50%;
+    }
+
+    .notary-section {
+        margin-top: 3em;
+        page-break-inside: avoid;
+    }
+
+    /* Ensure clean page breaks */
+    .signature-section,
+    .notary-section {
+        page-break-before: auto;
+    }
+}
+
+/* Screen-only styles for the print preview */
+.print-view {
+    display: none;
+    padding: 2em;
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    font-family: 'Times New Roman', Times, serif;
+    line-height: 1.5;
+}
+
+.print-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2em;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.legal-header {
+    text-align: center;
+    margin-bottom: 1em;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.legal-subheader {
+    text-align: center;
+    margin-bottom: 2em;
+    font-style: italic;
+}
+
+.state-county {
+    text-align: center;
+    margin: 2em 0;
+    font-weight: bold;
+}
+
+.before-me {
+    margin: 2em 0;
+    text-align: justify;
+}
+
+.numbered-section {
+    margin: 1.5em 0;
+}
+
+.numbered-section h3 {
+    font-weight: bold;
+    display: inline;
+}
+
+.section-content {
+    margin-left: 1.5em;
+    margin-top: 0.5em;
+}
+
+.signature-section {
+    margin-top: 3em;
+}
+
+.signature-line {
+    border-top: 1px solid black;
+    margin: 2em 0;
+    width: 50%;
+}
+
+.notary-section {
+    margin-top: 3em;
+}
+
+/* Print styles for the legal document */
+.print-view {
+    font-family: 'Times New Roman', Times, serif;
+    line-height: 1.5;
+    padding: 1.5in 1in;
+    max-width: 8.5in;
+    margin: 0 auto;
+}
+
+.print-preview-header {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.preview-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.document-header {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #000;
+}
+
+.document-header-left {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.document-header-right {
+    width: 40%;
+    border-left: 1px solid #000;
+    padding-left: 20px;
+    text-align: center;
+}
+
+.header-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.header-value {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 5px;
+}
+
+.legal-header {
+    text-align: center;
+    font-size: 18pt;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.legal-subheader {
+    text-align: center;
+    font-size: 12pt;
+    margin-bottom: 20px;
+}
+
+.state-county {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.before-me {
+    margin-bottom: 20px;
+}
+
+.numbered-section {
+    margin-bottom: 15px;
+}
+
+.numbered-section h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.section-content {
+    margin-left: 20px;
+}
+
+.signature-section, .notary-section {
+    margin-top: 40px;
+}
+
+.state-county-signature {
+    font-weight: normal;
+    margin-bottom: 20px;
+    line-height: 2.5;
+}
+
+.signature-line {
+    border-bottom: 1px solid black;
+    width: 80%;
+    margin: 30px 0 5px;
+}
+
+/* Release of Lien specific styles */
+.release-content {
+    margin: 20px 0;
+}
+
+.know-all {
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.indented {
+    margin-left: 40px;
+    margin-right: 40px;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+/* Print preview buttons */
+.btn {
+    font-family: system-ui, -apple-system, sans-serif;
+}
