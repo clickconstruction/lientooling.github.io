@@ -1,5 +1,6 @@
 /* Print-specific styles */
 @media print {
+    /* Hide elements that shouldn't be printed */
     .no-print, 
     .nav, 
     .nav-pills, 
@@ -13,10 +14,45 @@
         display: none !important;
     }
     
+    /* Reset container styles for printing */
     body > .container {
         margin: 0;
         padding: 0;
         max-width: 100%;
+    }
+    
+    /* Ensure white background for printing */
+    body, html, #print-view, .print-content, .letter-content {
+        background-color: white !important;
+        background: white !important;
+        box-shadow: none !important;
+        color: black !important;
+    }
+    
+    /* Remove any borders or shadows that might appear as gray in print */
+    #print-view, .print-content, .letter-content, div {
+        border-color: transparent !important;
+        box-shadow: none !important;
+    }
+    
+    /* Letter container specific print styles */
+    .letter-container {
+        background-color: white !important;
+        background: white !important;
+        box-shadow: none !important;
+        border: none !important;
+        color: black !important;
+        margin: 0 !important;
+        padding: 0.5in !important; /* Standard document margins */
+    }
+    
+    /* Print-only class for documents */
+    .print-document {
+        background-color: white !important;
+        color: black !important;
+        font-size: 12pt !important;
+        line-height: 1.5 !important;
+        font-family: 'Times New Roman', Times, serif !important;
     }
     
     /* Hide browser header/footer */

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demand Letter Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+        .signature-line {
+            border-bottom: 1px solid #000;
+            width: 200px;
+            margin-bottom: 5px;
+        }
+        #letter-container {
+            border: 1px solid #ddd;
+            padding: 30px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        #print-view {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4 no-print">Demand Letter Generator</h1>
+        
+        <div id="form-view">
+            <div class="d-flex justify-content-end mb-3">
+                <button type="button" id="fill-test-data" class="btn btn-secondary">Fill Test Data</button>
+            </div>
+            
+            <form id="letter-form">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Your Business Information</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Business Name</label>
+                                <input type="text" class="form-control" name="business-name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Your Name</label>
+                                <input type="text" class="form-control" name="sender-name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Business Address</label>
+                                <input type="text" class="form-control" name="business-address" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Business City/State/ZIP</label>
+                                <input type="text" class="form-control" name="business-location" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Business Phone</label>
+                                <input type="text" class="form-control" name="business-phone" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Business Email</label>
+                                <input type="email" class="form-control" name="business-email" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Client Information</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Client Name</label>
+                                <input type="text" class="form-control" name="client-name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Client Address</label>
+                                <input type="text" class="form-control" name="client-address" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Client City/State/ZIP</label>
+                                <input type="text" class="form-control" name="client-location" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Client County</label>
+                                <input type="text" class="form-control" name="client-county" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Invoice Details</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Invoice Number</label>
+                                <input type="text" class="form-control" name="invoice-number" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Invoice Date</label>
+                                <input type="date" class="form-control" name="invoice-date" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Due Date</label>
+                                <input type="date" class="form-control" name="due-date" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Payment Deadline</label>
+                                <input type="date" class="form-control" name="payment-deadline" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Service Description</label>
+                                <textarea class="form-control" name="service-description" rows="3" required></textarea>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Service Dates</label>
+                                <input type="text" class="form-control" name="service-dates" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Completion Date</label>
+                                <input type="date" class="form-control" name="completion-date" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Invoice Total ($)</label>
+                                <input type="number" class="form-control" name="invoice-total" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Payments Received ($)</label>
+                                <input type="number" class="form-control" name="payments-received" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Outstanding Balance ($)</label>
+                                <input type="number" class="form-control" name="outstanding-balance" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Payment Method Instructions</label>
+                                <textarea class="form-control" name="payment-method" rows="3" required>Payment can be made by bank transfer to Click Plumbing LLC 5501 Balcones Dr A141 Austin TX 78731, Routing: 091311229, Checking: 202511226605.</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Additional Options</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="include-late-fees">
+                            <label class="form-check-label" for="include-late-fees">
+                                Include Late Fee Language
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="include-notarial">
+                            <label class="form-check-label" for="include-notarial">
+                                Include Notarial Language
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button type="button" id="generate-btn" class="btn btn-primary btn-lg">Generate Demand Letter</button>
+                </div>
+            </form>
+        </div>
+        
+        <div id="print-view" class="mt-4">
+            <div class="no-print mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Print Preview</h2>
+                    <div>
+                        <button id="back-btn" class="btn btn-secondary me-2">Back to Edit</button>
+                        <button id="print-btn" class="btn btn-primary">Print Document</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="letter-container"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get elements
+            const formView = document.getElementById('form-view');
+            const printView = document.getElementById('print-view');
+            const letterForm = document.getElementById('letter-form');
+            const letterContainer = document.getElementById('letter-container');
+            const generateBtn = document.getElementById('generate-btn');
+            const backBtn = document.getElementById('back-btn');
+            const printBtn = document.getElementById('print-btn');
+            const fillTestDataBtn = document.getElementById('fill-test-data');
+            
+            // Test data
+            const testData = {
+                'business-name': 'Click Plumbing LLC',
+                'sender-name': 'Malachi Whites',
+                'business-address': '5501 Balcones Dr A141',
+                'business-location': 'Austin, TX 78731',
+                'business-phone': '(512) 555-1234',
+                'business-email': 'malachi@clickplumbing.com',
+                'client-name': 'Alice Johnson',
+                'client-address': '456 Development Ave',
+                'client-location': 'Austin, TX 78702',
+                'client-county': 'Travis',
+                'invoice-number': 'INV-2025-0456',
+                'invoice-date': '2025-04-15',
+                'due-date': '2025-04-30',
+                'payment-deadline': '2025-05-25',
+                'service-description': 'Complete renovation of kitchen including cabinets, countertops, electrical, and plumbing work',
+                'service-dates': 'January 15 - April 15, 2025',
+                'completion-date': '2025-04-15',
+                'invoice-total': '25000',
+                'payments-received': '0',
+                'outstanding-balance': '25000',
+                'payment-method': 'Payment can be made by bank transfer to Click Plumbing LLC 5501 Balcones Dr A141 Austin TX 78731, Routing: 091311229, Checking: 202511226605.'
+            };
+            
+            // Fill test data
+            fillTestDataBtn.addEventListener('click', function() {
+                Object.keys(testData).forEach(key => {
+                    const input = letterForm.querySelector(`[name="${key}"]`);
+                    if (input) {
+                        input.value = testData[key];
+                    }
+                });
+                
+                document.getElementById('include-late-fees').checked = true;
+                document.getElementById('include-notarial').checked = true;
+            });
+            
+            // Generate letter
+            generateBtn.addEventListener('click', function() {
+                // Get form data
+                const formData = new FormData(letterForm);
+                const formValues = {};
+                
+                for (const [key, value] of formData.entries()) {
+                    formValues[key] = value;
+                }
+                
+                // Format dates
+                const formatDate = (dateString) => {
+                    if (!dateString) return '';
+                    const date = new Date(dateString);
+                    return date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                };
+                
+                const today = new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // Get checkbox values
+                const includeLateFeesChecked = document.getElementById('include-late-fees').checked;
+                const includeNotarialChecked = document.getElementById('include-notarial').checked;
+                
+                // Create letter content
+                const letterHTML = `
+                    <div style="max-width: 800px; margin: 0 auto; line-height: 1.5;">
+                        <div style="text-align: right; margin-bottom: 2em;">
+                            ${today}
+                        </div>
+                        
+                        <div style="margin-bottom: 2em;">
+                            <strong>TO:</strong> ${formValues['client-name']}<br>
+                            ${formValues['client-address']}<br>
+                            ${formValues['client-location']}
+                        </div>
+                        
+                        <div style="margin-bottom: 2em;">
+                            <strong>Re: Final Demand for Payment - Invoice #${formValues['invoice-number']}</strong>
+                        </div>
+                        
+                        <div style="margin-bottom: 1em;">
+                            Dear ${formValues['client-name']},
+                        </div>
+                        
+                        <div style="margin-bottom: 1em; text-align: justify;">
+                            This letter serves as a final formal demand for payment in the amount of <strong>$${parseFloat(formValues['outstanding-balance']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong> 
+                            for services rendered. Our records indicate that Invoice #${formValues['invoice-number']} dated ${formatDate(formValues['invoice-date'])} 
+                            remains unpaid despite the payment due date of ${formatDate(formValues['due-date'])}.
+                        </div>
+                        
+                        <div style="margin-bottom: 1em; text-align: justify;">
+                            The services provided included: ${formValues['service-description']}. These services were performed during ${formValues['service-dates']} 
+                            and were completed on ${formatDate(formValues['completion-date'])}.
+                        </div>
+                        
+                        <div style="margin-bottom: 1em; text-align: justify;">
+                            The total invoice amount was $${parseFloat(formValues['invoice-total']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}, 
+                            of which $${parseFloat(formValues['payments-received']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} has been paid, 
+                            leaving an outstanding balance of $${parseFloat(formValues['outstanding-balance']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}.
+                        </div>
+                        
+                        ${includeLateFeesChecked ? `
+                        <div style="margin-bottom: 1em; text-align: justify;">
+                            Please note that according to our agreement, late fees may be applied to overdue balances. These fees will continue to accrue until payment is received in full.
+                        </div>
+                        ` : ''}
+                        
+                        <div style="margin-bottom: 1em; text-align: justify;">
+                            Please remit payment in full by <strong>${formatDate(formValues['payment-deadline'])}</strong>. ${formValues['payment-method']}
+                        </div>
+                        
+                        <div style="margin-bottom: 2em; text-align: justify;">
+                            If you dispute this debt or any portion thereof, you must notify us within 30 days of receiving this letter. Otherwise, we will assume the debt is valid.
+                        </div>
+                        
+                        <div style="margin-bottom: 2em; text-align: justify;">
+                            If payment is not received by the date specified above, we reserve the right to pursue all legal remedies available, including filing a mechanic's lien and/or initiating legal proceedings to recover the amount owed plus any additional costs incurred in the collection process.
+                        </div>
+                        
+                        <div style="margin-top: 3em;">
+                            Sincerely,
+                            <div style="margin-top: 2em;">
+                                <div class="signature-line"></div>
+                                <strong>${formValues['sender-name']}</strong><br>
+                                ${formValues['business-name']}<br>
+                                ${formValues['business-phone']}<br>
+                                ${formValues['business-email']}
+                            </div>
+                        </div>
+                        
+                        ${includeNotarialChecked ? `
+                        <div style="margin-top: 4em; border-top: 1px solid #ccc; padding-top: 1em;">
+                            <p>STATE OF TEXAS<br>
+                            COUNTY OF ${formValues['client-county'].toUpperCase()}</p>
+                            
+                            <p>SWORN TO AND SUBSCRIBED BEFORE ME on this _____ day of _____________, ${new Date().getFullYear()}, by ${formValues['sender-name']}.</p>
+                            
+                            <div style="margin-top: 2em;">
+                                ________________________________<br>
+                                Notary Public, State of Texas
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                
+                // Display letter
+                letterContainer.innerHTML = letterHTML;
+                
+                // Show print view, hide form
+                formView.style.display = 'none';
+                printView.style.display = 'block';
+                
+                console.log('Switched to print view');
+                console.log('Letter container has content:', letterContainer.innerHTML.length > 0);
+            });
+            
+            // Back button
+            backBtn.addEventListener('click', function() {
+                printView.style.display = 'none';
+                formView.style.display = 'block';
+            });
+            
+            // Print button
+            printBtn.addEventListener('click', function() {
+                window.print();
+            });
+        });
+    </script>
+</body>
+</html>

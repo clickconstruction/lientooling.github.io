@@ -36,6 +36,35 @@ const mockData = {
         'property-city': 'Austin',
         'property-state': 'TX',
         'property-zip': '78702'
+    },
+    'demand-letter': {
+        'business-name': 'Click Plumbing LLC',
+        'sender-name': 'Malachi Whites, Owner',
+        'business-address': '5501 Balcones Dr A141',
+        'business-city': 'Austin',
+        'business-state': 'Texas',
+        'business-zip': '78731',
+        'business-phone': '(512) 555-1234',
+        'business-email': 'malachi@clickplumbing.com',
+        'client-name': 'Alice Johnson',
+        'client-address': '456 Development Ave',
+        'client-city': 'Austin',
+        'client-state': 'Texas',
+        'client-zip': '78702',
+        'client-county': 'Travis',
+        'invoice-number': 'INV-2025-0456',
+        'invoice-date': '2025-04-15',
+        'due-date': '2025-04-30',
+        'payment-deadline': '2025-05-25',
+        'service-description': 'Complete renovation of kitchen including cabinets, countertops, electrical, and plumbing work',
+        'service-dates': 'January 15 - April 15, 2025',
+        'completion-date': '2025-04-15',
+        'invoice-total': '25000',
+        'payments-received': '0',
+        'outstanding-balance': '25000',
+        'include-late-fees': true,
+        'include-notarial': true,
+        'payment-method': 'Payment can be made by bank transfer to Click Plumbing LLC 5501 Balcones Dr A141 Austin TX 78731, Routing: 091311229, Checking: 202511226605.'
     }
 };
 
@@ -51,11 +80,17 @@ function fillFormWithTestData(formId) {
         }
     }
     
-    // Simple approach - directly set values by name attribute
+    // Set values by name attribute, handling different input types
     Object.keys(data).forEach(key => {
         const input = form.querySelector(`[name="${key}"]`);
         if (input) {
-            input.value = data[key];
+            if (input.type === 'checkbox') {
+                // For checkboxes, set the checked property
+                input.checked = data[key];
+            } else {
+                // For other input types, set the value
+                input.value = data[key];
+            }
         }
     });
 
@@ -91,6 +126,31 @@ async function lookupCounty(address, city, state, zip) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Get the current page form ID based on the HTML file name
+    const currentPage = window.location.pathname.split('/').pop();
+    let currentFormId = '';
+    
+    if (currentPage === 'mechanics-lien.html') {
+        currentFormId = 'mechanics-lien';
+    } else if (currentPage === 'release-lien.html') {
+        currentFormId = 'release-lien';
+    } else if (currentPage === 'demand-letter.html') {
+        currentFormId = 'demand-letter';
+    }
+    
+    // Add event listener for the test data button
+    const testDataBtn = document.getElementById('test-data-btn');
+    if (testDataBtn && currentFormId) {
+        testDataBtn.addEventListener('click', function() {
+            fillFormWithTestData(currentFormId);
+            
+            // If it's the demand letter form, use the specific function from demand-letter.js
+            if (currentFormId === 'demand-letter' && typeof fillDemandLetterWithTestData === 'function') {
+                fillDemandLetterWithTestData();
+            }
+        });
+    }
+    
     // Add event listeners for property address fields to auto-fill county for Mechanic's Lien form
     const propertyAddressInput = document.querySelector('input[name="property-address"]');
     const propertyCityInput = document.querySelector('input[name="property-city"]');
@@ -210,38 +270,61 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Also keep the automatic lookup on blur for convenience for Mechanic's Lien form
-    propertyAddressInput.addEventListener('blur', function() {
-        // Only auto-lookup if all fields are filled
-        const address = propertyAddressInput.value.trim();
-        const city = propertyCityInput.value.trim();
-        const state = propertyStateInput.value.trim();
-        const zip = propertyZipInput.value.trim();
-        
-        if (address && city && state && zip) {
-            lookupCounty(address, city, state, zip).then(county => {
-                if (county) {
-                    propertyCountyInput.value = county;
-                }
-            });
-        }
-    });
+    if (propertyAddressInput) {
+        propertyAddressInput.addEventListener('blur', function() {
+            // Only auto-lookup if all fields are filled
+            const address = propertyAddressInput.value.trim();
+            const city = propertyCityInput.value.trim();
+            const state = propertyStateInput.value.trim();
+            const zip = propertyZipInput.value.trim();
+            
+            if (address && city && state && zip) {
+                lookupCounty(address, city, state, zip).then(county => {
+                    if (county) {
+                        propertyCountyInput.value = county;
+                    }
+                });
+            }
+        });
+    }
     
-    // Add automatic lookup on blur for Release of Lien form - Claimant Information
-    claimantAddressInput.addEventListener('blur', function() {
-        // Only auto-lookup if all fields are filled
-        const address = claimantAddressInput.value.trim();
-        const city = claimantCityInput.value.trim();
-        const state = claimantStateInput.value.trim();
-        const zip = claimantZipInput.value.trim();
-        
-        if (address && city && state && zip) {
-            lookupCounty(address, city, state, zip).then(county => {
-                if (county) {
-                    releaseCountyInput.value = county;
-                }
-            });
-        }
-    });
+    // Add automatic lookup on blur for Release of Lien form - Property Information
+    if (propertyAddressInputRelease) {
+        propertyAddressInputRelease.addEventListener('blur', function() {
+            // Only auto-lookup if all fields are filled
+            const address = propertyAddressInputRelease.value.trim();
+            const city = propertyCityInputRelease.value.trim();
+            const state = propertyStateInputRelease.value.trim();
+            const zip = propertyZipInputRelease.value.trim();
+            
+            if (address && city && state && zip) {
+                lookupCounty(address, city, state, zip).then(county => {
+                    if (county) {
+                        if (propertyCountyInputRelease) {
+                            propertyCountyInputRelease.value = county;
+                        }
+                    }
+                });
+            }
+        });
+    }
+    if (claimantAddressInput) {
+        claimantAddressInput.addEventListener('blur', function() {
+            // Only auto-lookup if all fields are filled
+            const address = claimantAddressInput.value.trim();
+            const city = claimantCityInput.value.trim();
+            const state = claimantStateInput.value.trim();
+            const zip = claimantZipInput.value.trim();
+            
+            if (address && city && state && zip) {
+                lookupCounty(address, city, state, zip).then(county => {
+                    if (county) {
+                        releaseCountyInput.value = county;
+                    }
+                });
+            }
+        });
+    }
     
     // Function to check if all property address fields are filled and lookup county for Release of Lien form
     function checkAndLookupCountyProperty() {
@@ -295,9 +378,15 @@ document.addEventListener('DOMContentLoaded', function() {
     if (lookupCountyBtnProperty) {
         lookupCountyBtnProperty.addEventListener('click', checkAndLookupCountyProperty);
     }
-    propertyCityInput.addEventListener('blur', function() { /* Same auto-lookup logic */ });
-    propertyStateInput.addEventListener('blur', function() { /* Same auto-lookup logic */ });
-    propertyZipInput.addEventListener('blur', function() { /* Same auto-lookup logic */ });
+    if (propertyCityInput) {
+        propertyCityInput.addEventListener('blur', function() { /* Same auto-lookup logic */ });
+    }
+    if (propertyStateInput) {
+        propertyStateInput.addEventListener('blur', function() { /* Same auto-lookup logic */ });
+    }
+    if (propertyZipInput) {
+        propertyZipInput.addEventListener('blur', function() { /* Same auto-lookup logic */ });
+    }
     
     // Form navigation
     const navLinks = document.querySelectorAll('.nav-link');
@@ -333,37 +422,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
+        
+        // Hide the print view when switching forms
+        const printView = document.getElementById('print-view');
+        if (printView) {
+            printView.style.display = 'none';
+            printView.innerHTML = ''; // Clear the content
+        }
     }
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const formId = link.getAttribute('data-form');
-            const currentFormId = document.querySelector('.nav-link.active').getAttribute('data-form');
-            
-            // Save current form data before switching
-            saveFormData(currentFormId);
-            
-            // Update navigation
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-            
-            // Show selected form and hide print view
-            Object.keys(forms).forEach(key => {
-                forms[key].style.display = key === formId ? 'block' : 'none';
-            });
-            
-            // Restore previous form data for the selected form
-            restoreFormData(formId);
-            
-            // Hide the print view when switching tabs
-            const printView = document.getElementById('print-view');
-            if (printView) {
-                printView.style.display = 'none';
-                printView.innerHTML = ''; // Clear the content
-            }
-        });
-    });
 
     // Handle claimant type toggle
     const claimantTypeRadios = document.querySelectorAll('input[name="claimantType"]');
@@ -378,13 +444,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Form validation and PDF generation
-    // Test data button handler
-    const testDataBtn = document.getElementById('test-data-btn');
-    testDataBtn.addEventListener('click', () => {
-        // Find which form is currently visible
-        const activeFormId = document.querySelector('.nav-link.active').getAttribute('data-form');
-        fillFormWithTestData(activeFormId);
-    });
 
     // Add direct click handlers to the submit buttons
     document.querySelectorAll('button[type="submit"]').forEach(button => {
@@ -399,6 +458,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             console.log('Form found:', form.id);
+            
+            // Special handling for demand letter form
+            if (form.id === 'demand-letter') {
+                // Let the demand-letter.js handle this form
+                return;
+            }
             
             if (!form.checkValidity()) {
                 console.log('Form is invalid');
@@ -435,13 +500,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Also keep the form submit handlers as a backup
     Object.values(forms).forEach(form => {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            console.log('Form submitted:', this.id);
-            
-            if (!form.checkValidity()) {
-                event.stopPropagation();
-                form.classList.add('was-validated');
+        if (form) { // Add null check
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                console.log('Form submitted:', this.id);
+                
+                if (!form.checkValidity()) {
+                    event.stopPropagation();
+                    form.classList.add('was-validated');
                 
                 // Find all invalid fields
                 const invalidFields = form.querySelectorAll(':invalid');
@@ -468,6 +534,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             createPrintView(form);
         });
+        }
     });
 });
 
@@ -478,24 +545,222 @@ function formatDate(date) {
     return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 }
 
-function createPrintView(form) {
-    console.log('Creating print view for form:', form.id);
-    // Create print view container if it doesn't exist
-    let printView = document.getElementById('print-view');
-    if (!printView) {
-        printView = document.createElement('div');
-        printView.id = 'print-view';
-        printView.className = 'print-view';
-        document.body.appendChild(printView);
-    }
+// Helper function to generate Mechanic's Lien HTML content
+function generateMechanicsLienHTML(formData, formValues) {
+    return `
+        <div class="legal-header">Mechanic's Lien Affidavit</div>
+        
+        <div class="state-county">
+            STATE OF TEXAS<br>
+            COUNTY OF ${formValues['property-county'].toUpperCase()}
+        </div>
+        
+        <div class="before-me">
+            BEFORE ME, the undersigned authority, on this day personally appeared 
+            ${formValues['claimant-name']}, known to me to be the person whose name is subscribed 
+            hereto and upon oath deposes and says:
+        </div>
+        
+        <div class="numbered-section">
+            <h3>1.</h3> <span class="section-content">
+            My name is ${formValues['claimant-name']}. 
+            ${formValues['claimantType'] === 'company' ? `I am the authorized representative of ${formValues['company-name']}, ` : ''}
+            hereinafter referred to as "Claimant." 
+            Claimant's address is ${formValues['claimant-address']}, ${formValues['claimant-city']}, 
+            ${formValues['claimant-state']} ${formValues['claimant-zip']}.
+            </span>
+        </div>
+        
+        <div class="numbered-section">
+            <h3>2.</h3> <span class="section-content">
+            Claimant has furnished labor and/or materials for improvements to the following described 
+            real property located in ${formValues['property-county']} County, Texas:
+            <br><br>
+            ${formValues['legal-description']}
+            <br><br>
+            The property is owned by ${formValues['owner-name']} and is commonly known as:
+            ${formValues['property-address']}, ${formValues['property-city']}, 
+            ${formValues['property-state']} ${formValues['property-zip']}.
+            </span>
+        </div>
+        
+        <div class="numbered-section">
+            <h3>3.</h3> <span class="section-content">
+            The labor and/or materials furnished by Claimant consisted of:
+            <br><br>
+            ${formValues['work-description']}
+            </span>
+        </div>
+        
+        <div class="numbered-section">
+            <h3>4.</h3> <span class="section-content">
+            Claimant furnished the labor and/or materials under an agreement with 
+            ${formValues['owner-name']}. The labor and/or materials were furnished between 
+            ${formatDate(formValues['work-start'])} and ${formatDate(formValues['work-end'])}.
+            </span>
+        </div>
+        
+        <div class="numbered-section">
+            <h3>5.</h3> <span class="section-content">
+            The amount due and unpaid to Claimant for such labor and/or materials is 
+            $${parseFloat(formValues['unpaid-amount']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}.
+            </span>
+        </div>
+        
+        <div class="numbered-section">
+            <h3>6.</h3> <span class="section-content">
+            Claimant sent notice of the unpaid amount to the property owner on 
+            ${formatDate(formValues['notice-date'])} as required by law.
+            </span>
+        </div>
+        
+        <div class="numbered-section">
+            <h3>7.</h3> <span class="section-content">
+            Claimant claims a lien against all of the above-described property and improvements 
+            thereon in the amount of $${parseFloat(formValues['unpaid-amount']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}.
+            </span>
+        </div>
+        
+        <div class="signature-section">
+            <div class="signature-line"></div>
+            <div>${formValues['claimant-name']}</div>
+            ${formValues['claimantType'] === 'company' ? `<div>${formValues['company-name']}</div>` : ''}
+            <div>Claimant</div>
+        </div>
+        
+        <div class="notary-section">
+            <p>
+            SUBSCRIBED AND SWORN TO BEFORE ME on this the ______ day of ______________, ${new Date().getFullYear()}, 
+            to certify which witness my hand and official seal.
+            </p>
+            
+            <div class="signature-line"></div>
+            <div>Notary Public, State of Texas</div>
+            <div>My Commission Expires: _______________</div>
+        </div>
+    `;
+}
 
-    // Generate print view content
-    const isLienForm = form.id === 'mechanics-lien';
+// Helper function to generate Release of Lien HTML content
+function generateReleaseLienHTML(formData, formValues) {
+    return `
+        <div class="legal-header">Release of Mechanic's Lien</div>
+        
+        <div class="state-county">
+            STATE OF TEXAS<br>
+            COUNTY OF ${formValues['property-county'].toUpperCase()}
+        </div>
+        
+        <div class="before-me">
+            KNOW ALL MEN BY THESE PRESENTS:
+        </div>
+        
+        <div class="numbered-section">
+            <h3>1.</h3> <span class="section-content">
+            That ${formValues['claimant-name']}, 
+            ${formValues['company-name'] ? `of ${formValues['company-name']}, ` : ''}
+            whose address is ${formValues['claimant-address']}, ${formValues['claimant-city']}, 
+            ${formValues['claimant-state']} ${formValues['claimant-zip']}, 
+            hereinafter referred to as "Claimant", does hereby release, discharge, and relinquish 
+            any and all liens, lien claims, or right to lien held by Claimant against the property 
+            described below.
+            </span>
+        </div>
+        
+        <div class="numbered-section">
+            <h3>2.</h3> <span class="section-content">
+            This release applies to that certain Mechanic's Lien filed by Claimant against property 
+            owned by ${formValues['owner-name']}, recorded under Instrument or File Number 
+            ${formValues['lien-reference']} in the Official Public Records of ${formValues['property-county']} 
+            County, Texas.
+            </span>
+        </div>
+        
+        <div class="numbered-section">
+            <h3>3.</h3> <span class="section-content">
+            The property subject to this release is described as follows:
+            <br><br>
+            ${formValues['property-description']}
+            <br><br>
+            The property is commonly known as:
+            ${formValues['property-address']}, ${formValues['property-city']}, 
+            ${formValues['property-state']} ${formValues['property-zip']}.
+            </span>
+        </div>
+        
+        <div class="numbered-section">
+            <h3>4.</h3> <span class="section-content">
+            This Release of Lien is executed on account of payment and/or satisfaction of the debt 
+            secured by said lien on ${formatDate(formValues['payment-date'])}.
+            </span>
+        </div>
+        
+        <div class="signature-section">
+            <p>EXECUTED this ______ day of ______________, ${new Date().getFullYear()}.</p>
+            
+            <div class="signature-line"></div>
+            <div>${formValues['claimant-name']}</div>
+            ${formValues['company-name'] ? `<div>${formValues['company-name']}</div>` : ''}
+            <div>Claimant</div>
+        </div>
+        
+        <div class="notary-section">
+            <div class="state-county">
+                STATE OF TEXAS<br>
+                COUNTY OF _______________
+            </div>
+            
+            <p>
+            BEFORE ME, the undersigned authority, on this day personally appeared 
+            ${formValues['claimant-name']}, known to me to be the person whose name is subscribed 
+            to the foregoing instrument, and acknowledged to me that he/she executed the same for 
+            the purposes and consideration therein expressed.
+            </p>
+            
+            <p>
+            GIVEN UNDER MY HAND AND SEAL OF OFFICE on this the ______ day of ______________, ${new Date().getFullYear()}.
+            </p>
+            
+            <div class="signature-line"></div>
+            <div>Notary Public, State of Texas</div>
+            <div>My Commission Expires: _______________</div>
+        </div>
+    `;
+}
+
+function createPrintView(form) {
+    const printView = document.getElementById('print-view');
+    const formId = form.id;
+    
+    // Clear previous content
+    printView.innerHTML = '';
+    
+    // Create print preview header with print button
+    const previewHeader = document.createElement('div');
+    previewHeader.className = 'print-preview-header no-print';
+    previewHeader.innerHTML = `
+        <h3>Print Preview</h3>
+        <button class="btn btn-primary" onclick="window.print()">Print Document</button>
+    `;
+    printView.appendChild(previewHeader);
+    
+    // Create the print view content container
+    const printContent = document.createElement('div');
+    printContent.className = 'print-view';
+    
+    // Get form data
+    const formData = new FormData(form);
+    const formValues = {};
+    formData.forEach((value, key) => {
+        formValues[key] = value;
+    });
+    
+    // Create document based on form type
     const isReleaseForm = form.id === 'release-lien';
+    const isLienForm = form.id === 'mechanics-lien';
+    const isDemandLetter = form.id === 'demand-letter';
     const title = isLienForm ? "Mechanic's Lien Form" : "Release of Lien Form";
     const today = new Date().toLocaleDateString();
-
-    const formData = new FormData(form);
     
     // Helper function to format addresses
     function formatAddress(street, city, state, zip) {
@@ -533,229 +798,33 @@ function createPrintView(form) {
         return value ? value : `[${placeholder}]`;
     }
     
-    // Hide all other elements when showing print view
-    document.querySelectorAll('.container > *:not(#print-view)').forEach(el => {
-        el.classList.add('no-print');
-    });
+    // Generate the appropriate HTML content based on form type
+    let htmlContent = '';
     
-    // Hide the test data button when showing preview
-    const testDataBtn = document.getElementById('test-data-btn');
-    if (testDataBtn) {
-        testDataBtn.style.display = 'none';
+    if (isLienForm) {
+        // Mechanic's Lien form HTML content
+        htmlContent = generateMechanicsLienHTML(formData, formValues);
+    } else if (isReleaseForm) {
+        // Release of Lien form HTML content
+        htmlContent = generateReleaseLienHTML(formData, formValues);
+    } else if (isDemandLetter) {
+        // For demand letter, we use the function from demand-letter.js
+        if (typeof createDemandLetterPrintView === 'function') {
+            createDemandLetterPrintView(form);
+            return; // Exit early as the demand letter function handles everything
+        }
     }
     
-    printView.innerHTML = `
-        <div class="print-preview-header no-print">
-            <h2>${isLienForm ? "Mechanic's Lien Preview" : "Release of Lien Preview"}</h2>
-            <div class="preview-buttons">
-                <button id="edit-form-btn" class="btn btn-secondary">Back to Form</button>
-                <button onclick="window.print()" class="btn btn-primary">Print Form</button>
-            </div>
-        </div>
-
-        <div class="document-header">
-            <div class="document-header-left">
-                <div class="header-title">This instrument was prepared by:</div>
-                <div class="header-value">${getValueOrPlaceholder(claimantName, 'Claimant\'s Full Legal Name')}</div>
-                <div class="header-value">${getValueOrPlaceholder(formData.get('claimant-address'), 'Claimant\'s Address')}</div>
-                <div class="header-value">${getValueOrPlaceholder(formData.get('claimant-city'), 'City')}, ${getValueOrPlaceholder(formData.get('claimant-state'), 'State')} ${getValueOrPlaceholder(formData.get('claimant-zip'), 'ZIP')}</div>
-                
-                <div class="header-title">Once recorded, return to:</div>
-                <div class="header-value">${getValueOrPlaceholder(claimantName, 'Claimant\'s Full Legal Name')}</div>
-                <div class="header-value">${getValueOrPlaceholder(formData.get('claimant-address'), 'Claimant\'s Address')}</div>
-                <div class="header-value">${getValueOrPlaceholder(formData.get('claimant-city'), 'City')}, ${getValueOrPlaceholder(formData.get('claimant-state'), 'State')} ${getValueOrPlaceholder(formData.get('claimant-zip'), 'ZIP')}</div>
-            </div>
-            <div class="document-header-right">
-                <p>This Space for Recorder's Use Only.</p>
-            </div>
-        </div>
-
-        ${isLienForm ? `
-        <div class="legal-header">
-            MECHANIC'S AND MATERIALMAN'S LIEN AFFIDAVIT
-        </div>
-        <div class="legal-subheader">
-            (Texas Property Code § 53.052)
-        </div>
-        ` : `
-        <div class="legal-header">
-            RELEASE OF MECHANIC'S LIEN
-        </div>
-        `}
-
-        ${isLienForm ? `
-        <div class="state-county">
-            State of Texas<br>
-            County of ${getValueOrPlaceholder(county, 'Property County')}
-        </div>
-
-        <div class="before-me">
-            BEFORE ME, the undersigned authority, on this day personally appeared:
-        </div>
-
-        <p><strong>${getValueOrPlaceholder(claimantName, 'Claimant\'s Full Legal Name')}</strong>${companyName ? `, doing business as <strong>${companyName}</strong>` : ''}, whose address is <strong>${getValueOrPlaceholder(claimantAddress, 'Mailing Address')}</strong>, and who, being by me duly sworn, did depose and state the following:</p>
-
-        <div class="numbered-section">
-            <h3>1. Claimant Information:</h3>
-            <div class="section-content">
-                I performed labor and/or furnished materials for the improvement of the property described below.
-            </div>
-        </div>
-
-        <div class="numbered-section">
-            <h3>2. Owner of the Property:</h3>
-            <div class="section-content">
-                <strong>${getValueOrPlaceholder(ownerName, 'Full Legal Name of Property Owner')}</strong><br>
-                ${getValueOrPlaceholder(propertyAddress, 'Property Owner\'s Address, City, State, ZIP')}
-            </div>
-        </div>
-
-        <div class="numbered-section">
-            <h3>3. Original Contractor (if not the same as Claimant):</h3>
-            <div class="section-content">
-                ${companyName || '[Not Applicable]'}
-            </div>
-        </div>
-
-        <div class="numbered-section">
-            <h3>4. Property Description:</h3>
-            <div class="section-content">
-                ${getValueOrPlaceholder(propertyDescription, 'Legal Description OR Street Address')},<br>
-                situated in ${getValueOrPlaceholder(county, 'Property County')} County, Texas.
-            </div>
-        </div>
-
-        <div class="numbered-section">
-            <h3>5. Work Description:</h3>
-            <div class="section-content">
-                The work consisted of:<br>
-                ${getValueOrPlaceholder(workDescription, 'Description of Work Performed')}
-            </div>
-        </div>
-
-        <div class="numbered-section">
-            <h3>6. Dates of Work:</h3>
-            <div class="section-content">
-                First furnished on: <strong>${getValueOrPlaceholder(workStart, 'Start Date')}</strong><br>
-                Last furnished on: <strong>${getValueOrPlaceholder(workEnd, 'End Date')}</strong>
-            </div>
-        </div>
-
-        <div class="numbered-section">
-            <h3>7. Unpaid Amount:</h3>
-            <div class="section-content">
-                The total amount due and unpaid is <strong>$${getValueOrPlaceholder(amount, 'Amount')}</strong>.
-            </div>
-        </div>
-
-        <div class="numbered-section">
-            <h3>8. Notice:</h3>
-            <div class="section-content">
-                I sent all required notices under Texas Property Code § 53.056, including notice to the owner and general contractor (if applicable), via certified mail on <strong>${getValueOrPlaceholder(noticeDate, 'Notice Date')}</strong>.
-            </div>
-        </div>
-
-        <div class="numbered-section">
-            <h3>9. Affidavit Filing:</h3>
-            <div class="section-content">
-                I file this lien claim in accordance with Texas Property Code Chapter 53, and respectfully request it be recorded against the property described above.
-            </div>
-        </div>
-
-        <p>FURTHER AFFIANT SAYETH NOT.</p>
-
-        <div class="signature-section">
-            <div class="signature-line"></div>
-            <p><strong>${getValueOrPlaceholder(claimantName, 'Claimant\'s Full Legal Name')}</strong><br>
-            ${companyName || ''}</p>
-        </div>
-
-        <div class="notary-section">
-            <p class="state-county-signature">
-                STATE OF ________________<br>
-                COUNTY OF ______________
-            </p><p>On this _____ day of _______________, ${new Date().getFullYear()}, before me, 
-            __________________________________, a Notary Public, personally appeared <strong>${getValueOrPlaceholder(claimantName, 'Claimant\'s Full Legal Name')}</strong>, known to me to be the person whose name is subscribed to the within instrument and acknowledged to me that ${claimantName.includes('Ms.') ? 'she' : 'he'} executed the same in ${claimantName.includes('Ms.') ? 'her' : 'his'} authorized capacity, and that by ${claimantName.includes('Ms.') ? 'her' : 'his'} signature on the instrument, ${claimantName.includes('Ms.') ? 'she' : 'he'} executed the instrument.</p>
-            <p>IN WITNESS WHEREOF, I hereunto set my hand and official seal.</p>
-            <div class="signature-line"></div>
-            <p>Notary Public<br>
-            My Commission Expires: _______________</p>
-        </div>
-        ` : `
-        <div class="state-county">
-            State of Texas<br>
-            County of ${getValueOrPlaceholder(county, 'Property County')}
-        </div>
-
-        <div class="release-content">
-            <p class="know-all">KNOW ALL MEN BY THESE PRESENTS:</p>
-
-            <p>That I, <strong>${getValueOrPlaceholder(claimantName, 'Claimant\'s Full Legal Name')}</strong>${companyName ? `, of <strong>${companyName}</strong>` : ''}, the undersigned lien claimant, do hereby acknowledge that the claim and lien filed by me on <strong>${getValueOrPlaceholder(formData.get('payment-date'), 'Date')}</strong>, and recorded in the Official Public Records of <strong>${getValueOrPlaceholder(county, 'Property County')}</strong> County, Texas under Document Number <strong>${getValueOrPlaceholder(formData.get('lien-reference'), 'Document Number')}</strong>, against the property located at:</p>
-
-            <p class="indented"><strong>${getValueOrPlaceholder(formData.get('property-address'), 'Property Address')}</strong><br>
-            <strong>${getValueOrPlaceholder(formData.get('property-city'), 'City')}, ${getValueOrPlaceholder(formData.get('property-state'), 'State')} ${getValueOrPlaceholder(formData.get('property-zip'), 'ZIP')}</strong></p>
-
-            <p>And legally described as:</p>
-
-            <p class="indented">${getValueOrPlaceholder(formData.get('property-description'), 'Property Description')}</p>
-
-            <p>has been fully paid and satisfied, and I do hereby release and discharge said lien.</p>
-        </div>
-
-        <div class="signature-section">
-            <div class="signature-line"></div>
-            <p><strong>${getValueOrPlaceholder(claimantName, 'Claimant\'s Full Legal Name')}</strong><br>
-            ${companyName || ''}</p>
-        </div>
-
-        <div class="notary-section">
-            <p class="state-county-signature">
-                STATE OF ________________<br>
-                COUNTY OF ______________
-            </p><p>On this _____ day of _______________, ${new Date().getFullYear()}, before me, 
-            __________________________________, a Notary Public, personally appeared <strong>${getValueOrPlaceholder(claimantName, 'Claimant\'s Full Legal Name')}</strong>, known to me to be the person whose name is subscribed to the within instrument and acknowledged to me that ${claimantName.includes('Ms.') ? 'she' : 'he'} executed the same in ${claimantName.includes('Ms.') ? 'her' : 'his'} authorized capacity, and that by ${claimantName.includes('Ms.') ? 'her' : 'his'} signature on the instrument, ${claimantName.includes('Ms.') ? 'she' : 'he'} executed the instrument.</p>
-            <p>IN WITNESS WHEREOF, I hereunto set my hand and official seal.</p>
-            <div class="signature-line"></div>
-            <p>Notary Public<br>
-            My Commission Expires: _______________</p>
-        </div>
-        `}
-    `;
+    // Set the HTML content
+    printContent.innerHTML = htmlContent;
+    
+    // Add the print content to the print view
+    printView.appendChild(printContent);
 
     // Hide the form and show the print view
     form.style.display = 'none';
     printView.style.display = 'block';
-
-    // Add event listener for the Edit button
-    setTimeout(() => {
-        const editButton = document.getElementById('edit-form-btn');
-        if (editButton) {
-            editButton.addEventListener('click', () => {
-                form.style.display = 'block';
-                printView.style.display = 'none';
-                
-                // Show the test data button again
-                const testDataBtn = document.getElementById('test-data-btn');
-                if (testDataBtn) {
-                    testDataBtn.style.display = 'block';
-                }
-            });
-        }
-    }, 100);
     
-    // Add a back button (keeping for backward compatibility)
-    const backButton = document.createElement('button');
-    backButton.className = 'btn btn-secondary mt-4 no-print';
-    backButton.textContent = 'Back to Form';
-    backButton.onclick = () => {
-        form.style.display = 'block';
-        printView.style.display = 'none';
-        
-        // Show the test data button again
-        const testDataBtn = document.getElementById('test-data-btn');
-        if (testDataBtn) {
-            testDataBtn.style.display = 'block';
-        }
-    };
-    printView.appendChild(backButton);
+    // Scroll to the print view
+    printView.scrollIntoView({ behavior: 'smooth' });
 }

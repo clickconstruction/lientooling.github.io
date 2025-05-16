@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Demand Letter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+        .print-view {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .signature-line {
+            border-bottom: 1px solid #000;
+            width: 200px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-2 no-print">Simple Demand Letter</h1>
+        <div class="d-flex justify-content-center mb-4 no-print">
+            <nav class="nav nav-pills">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link active" href="simple-demand-letter.html">Simple Demand Letter</a>
+            </nav>
+        </div>
+        
+        <div id="form-container">
+            <form id="simple-demand-letter-form" class="needs-validation" novalidate>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4>Basic Information</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Your Name</label>
+                                <input type="text" class="form-control" name="sender-name" value="John Doe" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Client Name</label>
+                                <input type="text" class="form-control" name="client-name" value="Jane Smith" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Amount Due</label>
+                                <input type="number" class="form-control" name="amount" value="1000" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Due Date</label>
+                                <input type="date" class="form-control" name="due-date" value="2025-06-01" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="submit" class="btn btn-primary">Generate PDF</button>
+                </div>
+            </form>
+        </div>
+        
+        <div id="print-view-container" style="display: none;">
+            <div class="no-print mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3>Print Preview</h3>
+                    <div>
+                        <button class="btn btn-secondary me-2" id="back-to-edit-btn">Back to Edit</button>
+                        <button class="btn btn-primary" onclick="window.print()">Print Document</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="print-content"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('simple-demand-letter-form');
+            const formContainer = document.getElementById('form-container');
+            const printViewContainer = document.getElementById('print-view-container');
+            const printContent = document.getElementById('print-content');
+            const backToEditBtn = document.getElementById('back-to-edit-btn');
+            
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                console.log('Form submitted');
+                
+                // Get form data
+                const formData = new FormData(form);
+                const formValues = {};
+                formData.forEach((value, key) => {
+                    formValues[key] = value;
+                });
+                
+                // Format date
+                const dueDate = new Date(formValues['due-date']);
+                const formattedDueDate = dueDate.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                
+                // Create print content
+                printContent.innerHTML = `
+                    <div style="padding: 20px; max-width: 800px; margin: 0 auto;">
+                        <div style="text-align: right; margin-bottom: 2em;">
+                            ${new Date().toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            })}
+                        </div>
+                        
+                        <div style="margin-bottom: 2em;">
+                            <strong>TO:</strong> ${formValues['client-name']}
+                        </div>
+                        
+                        <div style="margin-bottom: 2em;">
+                            <strong>Re: Final Demand for Payment</strong>
+                        </div>
+                        
+                        <div style="margin-bottom: 1em;">
+                            Dear ${formValues['client-name']},
+                        </div>
+                        
+                        <div style="margin-bottom: 2em; text-align: justify;">
+                            This letter serves as a final formal demand for payment in the amount of <strong>$${parseFloat(formValues['amount']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong>. 
+                            Please ensure payment is received by <strong>${formattedDueDate}</strong>.
+                        </div>
+                        
+                        <div style="margin-top: 3em;">
+                            Sincerely,
+                            <div style="margin-top: 2em;">
+                                <div class="signature-line"></div>
+                                <strong>${formValues['sender-name']}</strong>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Show print view and hide form
+                formContainer.style.display = 'none';
+                printViewContainer.style.display = 'block';
+                
+                console.log('Print view displayed');
+            });
+            
+            // Back to edit button
+            backToEditBtn.addEventListener('click', function() {
+                printViewContainer.style.display = 'none';
+                formContainer.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

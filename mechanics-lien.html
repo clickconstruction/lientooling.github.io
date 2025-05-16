@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanic's Lien Form</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        @media print {
+            /* Hide the page title in print mode */
+            title { display: none; }
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="print-styles.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-2 no-print">Lien Tooling</h1>
+        <div class="d-flex justify-content-center mb-4 no-print">
+            <nav class="nav nav-pills">
+                <a class="nav-link active" href="mechanics-lien.html">Mechanic's Lien</a>
+                <a class="nav-link" href="release-lien.html">Release of Lien</a>
+                <a class="nav-link" href="demand-letter.html">Demand Letter</a>
+                <a class="nav-link" href="rules-for-texas.html">Rules for Texas</a>
+            </nav>
+        </div>
+        <div class="d-flex justify-content-end mb-4 no-print">
+            <button type="button" class="btn btn-outline-primary" id="test-data-btn">Fill Test Data</button>
+        </div>
+
+        <!-- Mechanic's Lien Form -->
+        <form id="mechanics-lien" class="needs-validation" novalidate>
+            <h2 class="mb-4">Mechanic's Lien Form</h2>
+            
+            <!-- Claimant Type Selection -->
+            <div class="mb-4">
+                <label class="form-label">Claimant Type</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="claimantType" value="individual" checked>
+                    <label class="form-check-label">Individual</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="claimantType" value="company">
+                    <label class="form-check-label">Company</label>
+                </div>
+            </div>
+
+            <!-- Claimant Information -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>Claimant Information</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Claimant's Full Legal Name</label>
+                            <input type="text" class="form-control" name="claimant-name" required>
+                        </div>
+                        <div class="col-md-6 mb-3 company-field" style="display: none;">
+                            <label class="form-label">Company Name</label>
+                            <input type="text" class="form-control" name="company-name">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Address</label>
+                            <input type="text" class="form-control" name="claimant-address" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-control" name="claimant-city" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">State</label>
+                            <input type="text" class="form-control" name="claimant-state" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">ZIP</label>
+                            <input type="text" class="form-control" name="claimant-zip" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Owner Information -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>Property Owner Information</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Owner Name</label>
+                            <input type="text" class="form-control" name="owner-name" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Property Address</label>
+                            <input type="text" class="form-control" name="property-address" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-control" name="property-city" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">State</label>
+                            <input type="text" class="form-control" name="property-state" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">ZIP</label>
+                            <input type="text" class="form-control" name="property-zip" required>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">County (this is where the filing will be made)</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="property-county" required>
+                                <button class="btn btn-outline-secondary" type="button" id="lookup-county-btn">Lookup County</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property Description -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>Property Description</h4>
+                    <div class="mb-3">
+                        <label class="form-label">County Appraisal District Legal Description (must look up on County Appraisal District website)</label>
+                        <textarea class="form-control" rows="3" name="legal-description" required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work Details -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>Work Details</h4>
+                    <div class="mb-3">
+                        <label class="form-label">Work Description</label>
+                        <textarea class="form-control" rows="3" name="work-description" required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Work Start Date</label>
+                            <input type="date" class="form-control" name="work-start" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Work End Date</label>
+                            <input type="date" class="form-control" name="work-end" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Unpaid Amount ($)</label>
+                        <input type="number" step="0.01" class="form-control" name="unpaid-amount" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notice Information -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4>Notice Information</h4>
+                    <div class="mb-3">
+                        <label class="form-label">Notice Date</label>
+                        <input type="date" class="form-control" name="notice-date" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-primary">Generate PDF</button>
+            </div>
+        </form>
+
+        <!-- Print View Container -->
+        <div id="print-view" class="mt-4" style="display: none;"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script src="mechanics-lien.js"></script>
+</body>
+</html>
