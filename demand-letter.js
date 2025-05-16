@@ -3,7 +3,7 @@
 // Test data for the demand letter form
 const demandLetterTestData = {
     'business-name': 'Click Plumbing LLC',
-    'sender-name': 'Malachi Whites, Owner',
+    'sender-name': 'Malachi Whites, Master Plumber',
     'business-address': '5501 Balcones Dr A141',
     'business-city': 'Austin',
     'business-state': 'Texas',
@@ -65,8 +65,8 @@ function createDemandLetterPrintView(form) {
     previewHeader.className = 'print-preview-header no-print';
     previewHeader.innerHTML = `
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3>Print Preview</h3>
-            <div>
+            <h3 style="text-align: left; margin-left: 0;">Print Preview</h3>
+            <div style="text-align: right;">
                 <button class="btn btn-secondary me-2" id="back-to-edit-btn">Back to Edit</button>
                 <button class="btn btn-primary" onclick="window.print()">Print Document</button>
             </div>
@@ -136,7 +136,7 @@ function createDemandLetterPrintView(form) {
             ${formValues['client-city']}, ${formValues['client-state']} ${formValues['client-zip']}
         </div>
         
-        <div style="margin-bottom: 2em;">
+        <div style="margin-bottom: 1em; margin-top: 0; text-align: center;">
             <strong>Re: Final Demand for Payment – Invoice #${formValues['invoice-number']}</strong>
         </div>
         
@@ -148,7 +148,7 @@ function createDemandLetterPrintView(form) {
             This letter serves as a <strong>final formal demand for payment</strong> in the amount of <strong>$${outstandingBalance}</strong> for services rendered by ${formValues['business-name']} on or about <strong>${formValues['service-dates']}</strong>, as agreed upon between the parties. Despite prior communication, this balance remains unpaid.
         </div>
         
-        <div style="margin-bottom: 2em;">
+        <div style="margin-bottom: 1em;">
             <h3>Details of Debt:</h3>
             <ul>
                 <li><strong>Service Provided:</strong> ${formValues['service-description']}</li>
@@ -163,7 +163,7 @@ function createDemandLetterPrintView(form) {
             You were invoiced on <strong>${formatDemandLetterDate(formValues['invoice-date'])}</strong> with payment due on <strong>${formatDemandLetterDate(formValues['due-date'])}</strong>. To date, we have made good-faith efforts to resolve this matter without escalation, including previous notices and attempts to contact you regarding the balance due.
         </div>
         
-        <div style="margin: 2em 0; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; padding: 1em 0;">
+        <div>
             <h3>Demand</h3>
             <p>
                 Unless payment in full is received by <strong>${formatDemandLetterDate(formValues['payment-deadline'])}</strong>, we will pursue <strong>all legal remedies available</strong>, including but not limited to:
@@ -183,11 +183,11 @@ function createDemandLetterPrintView(form) {
             ${formValues['payment-method']} If you believe this balance is incorrect or disputed, you must notify us in writing <strong>before the deadline above</strong>.
         </div>
         
-        <div style="margin-bottom: 2em; text-align: justify;">
+        <div style="margin-bottom: 1em; text-align: justify;">
             <strong>Note:</strong> Per our agreement, late fees and interest may continue to accrue on the unpaid balance until payment is received in full.
         </div>
         
-        <div style="margin-top: 3em;">
+        <div style="margin-top: 1.5em;">
             Sincerely,
             <div style="margin-top: 2em;">
                 <div class="signature-line"></div>
@@ -201,7 +201,7 @@ function createDemandLetterPrintView(form) {
         ${formValues['include-notarial'] === 'on' ? `
         <div style="margin-top: 4em; border-top: 1px solid #ccc; padding-top: 1em;">
             <p>STATE OF TEXAS<br>
-            COUNTY OF ${formValues['client-county'].toUpperCase()}</p>
+            COUNTY OF ___________</p>
             
             <p>SWORN TO AND SUBSCRIBED BEFORE ME on this _____ day of _____________, ${new Date().getFullYear()}, by ${formValues['sender-name']}.</p>
             
