@@ -34,8 +34,10 @@ function createMechanicsLienPrintView(form) {
     const previewHeader = document.createElement('div');
     previewHeader.className = 'print-preview-header no-print';
     previewHeader.innerHTML = `
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 style="text-align: left; margin-left: 0;">Print Preview</h3>
+        <div style="display: flex; width: 100%;">
+            <div style="flex: 1; text-align: left;">
+                <h3>Print Preview</h3>
+            </div>
             <div style="text-align: right;">
                 <button class="btn btn-secondary me-2" id="back-to-edit-btn">Back to Edit</button>
                 <button class="btn btn-primary" onclick="window.print()">Print Document</button>
@@ -193,19 +195,14 @@ function createMechanicsLienPrintView(form) {
             </div>
         </div>
         
-        <div style="margin-top: 3em;">
-            <div style="margin-bottom: 1em;">
-                <strong>STATE OF TEXAS</strong><br>
-                <strong>COUNTY OF ${formValues['claimant-county'] ? formValues['claimant-county'].toUpperCase() : ''}</strong>
-            </div>
+        <div style="margin-top: 4em;">
+            <p>STATE OF TEXAS<br>
+            COUNTY OF ___________</p>
             
-            <div style="margin-bottom: 1em; text-align: justify;">
-                SUBSCRIBED AND SWORN TO BEFORE ME on ${today} by ${formValues['claimant-name'] || '[Claimant Name]'},
-                to certify which witness my hand and official seal.
-            </div>
+            <p>SWORN TO AND SUBSCRIBED BEFORE ME on this _____ day of _____________, ${new Date().getFullYear()}, by ${formValues['claimant-name'] || '[Claimant Name]'}.</p>
             
-            <div style="margin-top: 3em;">
-                <div style="border-bottom: 1px solid #000; width: 250px;"></div>
+            <div style="margin-top: 2em;">
+                ________________________________<br>
                 Notary Public, State of Texas
             </div>
         </div>
@@ -233,23 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const mechanicsLienForm = document.getElementById('mechanics-lien');
     const testDataBtn = document.getElementById('test-data-btn');
     
-    // Handle claimant type selection
-    const claimantTypeRadios = document.querySelectorAll('input[name="claimantType"]');
-    const companyField = document.querySelector('.company-field');
-    
-    if (claimantTypeRadios.length && companyField) {
-        claimantTypeRadios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                if (this.value === 'company') {
-                    companyField.style.display = 'block';
-                    document.querySelector('input[name="company-name"]').setAttribute('required', 'required');
-                } else {
-                    companyField.style.display = 'none';
-                    document.querySelector('input[name="company-name"]').removeAttribute('required');
-                }
-            });
-        });
-    }
+    // Claimant type selection has been removed
 
     // Add test data functionality
     if (testDataBtn) {
@@ -269,6 +250,9 @@ document.addEventListener('DOMContentLoaded', function() {
             // Fill property owner information
             document.querySelector('input[name="owner-name"]').value = 'Alice Johnson';
             document.querySelector('input[name="owner-address"]').value = '456 Oak Ave';
+            document.querySelector('input[name="owner-city"]').value = 'Austin';
+            document.querySelector('input[name="owner-state"]').value = 'TX';
+            document.querySelector('input[name="owner-zip"]').value = '78704';
             document.querySelector('input[name="property-address"]').value = '789 Pine Blvd';
             document.querySelector('input[name="property-city"]').value = 'Austin';
             document.querySelector('input[name="property-state"]').value = 'TX';

@@ -34,8 +34,10 @@ function createReleasePrintView(form) {
     const previewHeader = document.createElement('div');
     previewHeader.className = 'print-preview-header no-print';
     previewHeader.innerHTML = `
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 style="text-align: left; margin-left: 0;">Print Preview</h3>
+        <div style="display: flex; width: 100%;">
+            <div style="flex: 1; text-align: left;">
+                <h3>Print Preview</h3>
+            </div>
             <div style="text-align: right;">
                 <button class="btn btn-secondary me-2" id="back-to-edit-btn">Back to Edit</button>
                 <button class="btn btn-primary" onclick="window.print()">Print Document</button>
@@ -133,28 +135,18 @@ function createReleasePrintView(form) {
             <div style="margin-bottom: 1em;">
                 <div style="border-bottom: 1px solid #000; width: 250px;"></div>
                 ${formValues['claimant-name'] || '[Claimant Name]'}<br>
-                ${formValues['claimant-title'] || '[Title]'}
+                ${formValues['company-name'] || formValues['business-name'] || '[Company Name]'}
             </div>
         </div>
         
-        <div style="margin-top: 3em;">
-            <div style="margin-bottom: 1em;">
-                <strong>STATE OF TEXAS</strong><br>
-                <strong>COUNTY OF ${formValues['claimant-county'] ? formValues['claimant-county'].toUpperCase() : ''}</strong>
-            </div>
+        <div style="margin-top: 4em;">
+            <p>STATE OF TEXAS<br>
+            COUNTY OF ___________</p>
             
-            <div style="margin-bottom: 1em; text-align: justify;">
-                BEFORE ME, the undersigned authority, on this day personally appeared ${formValues['claimant-name'] || '[Claimant Name]'}, 
-                known to me to be the person whose name is subscribed to the foregoing instrument, and acknowledged to me that he/she executed 
-                the same for the purposes and consideration therein expressed.
-            </div>
+            <p>SWORN TO AND SUBSCRIBED BEFORE ME on this _____ day of _____________, ${new Date().getFullYear()}, by ${formValues['claimant-name'] || '[Claimant Name]'}.</p>
             
-            <div style="margin-bottom: 1em; text-align: justify;">
-                GIVEN UNDER MY HAND AND SEAL OF OFFICE this ${formattedToday}.
-            </div>
-            
-            <div style="margin-top: 3em;">
-                <div style="border-bottom: 1px solid #000; width: 250px;"></div>
+            <div style="margin-top: 2em;">
+                ________________________________<br>
                 Notary Public, State of Texas
             </div>
         </div>
@@ -178,14 +170,38 @@ function createReleasePrintView(form) {
 
 // Initialize release of lien functionality when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded in release-lien.js');
-    
-    // Add event listener for the release of lien form submission
+    console.log('Release of lien script loaded');
     const releaseForm = document.getElementById('release-lien');
-    console.log('Found release form:', releaseForm);
+    const testDataBtn = document.getElementById('test-data-btn');
+    
+    // Add test data functionality
+    if (testDataBtn) {
+        testDataBtn.addEventListener('click', function() {
+            console.log('Filling test data for release of lien form');
+
+            // Fill claimant information
+            document.querySelector('input[name="claimant-name"]').value = 'John Smith';
+            document.querySelector('input[name="business-name"]').value = 'Smith Construction LLC';
+            document.querySelector('input[name="claimant-address"]').value = '123 Main St';
+            document.querySelector('input[name="claimant-city"]').value = 'Austin';
+            document.querySelector('input[name="claimant-state"]').value = 'TX';
+            document.querySelector('input[name="claimant-zip"]').value = '78701';
+            
+            // Fill lien information
+            document.querySelector('input[name="filing-date"]').value = '2025-04-15';
+            
+            // Fill property information
+            document.querySelector('textarea[name="property-description"]').value = 'Lot 7, Block B, Westlake Hills Section 3, a subdivision in Travis County, Texas, according to the map or plat thereof recorded in Volume 58, Page 71 of the Plat Records of Travis County, Texas.';
+            document.querySelector('input[name="owner-name"]').value = 'Alice Johnson';
+            document.querySelector('input[name="property-county"]').value = 'Travis';
+            document.querySelector('input[name="property-address"]').value = '456 Oak Ave';
+            document.querySelector('input[name="property-city"]').value = 'Austin';
+            document.querySelector('input[name="property-state"]').value = 'TX';
+            document.querySelector('input[name="property-zip"]').value = '78704';
+        });
+    }
     
     if (releaseForm) {
-        // Add event listener directly to the submit button as well
         const submitButton = releaseForm.querySelector('button[type="submit"]');
         console.log('Found submit button:', submitButton);
         

@@ -64,8 +64,10 @@ function createDemandLetterPrintView(form) {
     const previewHeader = document.createElement('div');
     previewHeader.className = 'print-preview-header no-print';
     previewHeader.innerHTML = `
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 style="text-align: left; margin-left: 0;">Print Preview</h3>
+        <div style="display: flex; width: 100%;">
+            <div style="flex: 1; text-align: left;">
+                <h3>Print Preview</h3>
+            </div>
             <div style="text-align: right;">
                 <button class="btn btn-secondary me-2" id="back-to-edit-btn">Back to Edit</button>
                 <button class="btn btn-primary" onclick="window.print()">Print Document</button>
@@ -199,7 +201,7 @@ function createDemandLetterPrintView(form) {
         </div>
         
         ${formValues['include-notarial'] === 'on' ? `
-        <div style="margin-top: 4em; border-top: 1px solid #ccc; padding-top: 1em;">
+        <div style="margin-top: 4em;">
             <p>STATE OF TEXAS<br>
             COUNTY OF ___________</p>
             

@@ -34,18 +34,7 @@
         <form id="mechanics-lien" class="needs-validation" novalidate>
             <h2 class="mb-4">Mechanic's Lien Form</h2>
             
-            <!-- Claimant Type Selection -->
-            <div class="mb-4">
-                <label class="form-label">Claimant Type</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="claimantType" value="individual" checked>
-                    <label class="form-check-label">Individual</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="claimantType" value="company">
-                    <label class="form-check-label">Company</label>
-                </div>
-            </div>
+            <!-- Removed Claimant Type Selection -->
 
             <!-- Claimant Information -->
             <div class="card mb-4">
@@ -56,7 +45,7 @@
                             <label class="form-label">Claimant's Full Legal Name</label>
                             <input type="text" class="form-control" name="claimant-name" required>
                         </div>
-                        <div class="col-md-6 mb-3 company-field" style="display: none;">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label">Company Name</label>
                             <input type="text" class="form-control" name="company-name">
                         </div>
@@ -92,6 +81,18 @@
                         <div class="col-12 mb-3">
                             <label class="form-label">Owner Address</label>
                             <input type="text" class="form-control" name="owner-address">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Owner City</label>
+                            <input type="text" class="form-control" name="owner-city">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Owner State</label>
+                            <input type="text" class="form-control" name="owner-state" value="Texas">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Owner ZIP</label>
+                            <input type="text" class="form-control" name="owner-zip">
                         </div>
                         <div class="col-12 mb-3">
                             <label class="form-label">Property Address</label>
