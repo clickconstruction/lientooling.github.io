@@ -8,7 +8,7 @@ const demandLetterTestData = {
     'business-city': 'Austin',
     'business-state': 'Texas',
     'business-zip': '78731',
-    'business-phone': '(512) 555-1234',
+    'business-phone': '+1 (830) 946-0050',
     'business-email': 'malachi@clickplumbing.com',
     'client-name': 'Alice Johnson',
     'client-address': '456 Development Ave',
@@ -186,13 +186,12 @@ function createDemandLetterPrintView(form) {
         </div>
         
         <div style="margin-bottom: 1em; text-align: justify;">
-            <strong>Note:</strong> Per our agreement, late fees and interest may continue to accrue on the unpaid balance until payment is received in full.
+            <strong>Note:</strong> Late fees and interest may continue to accrue on the unpaid balance until payment is received in full.
         </div>
         
         <div style="margin-top: 1.5em;">
             Sincerely,
             <div style="margin-top: 2em;">
-                <div class="signature-line"></div>
                 <strong>${formValues['sender-name']}</strong><br>
                 ${formValues['business-name']}<br>
                 ${formValues['business-phone']}<br>
