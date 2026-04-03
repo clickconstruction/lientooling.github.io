@@ -31,14 +31,6 @@ const demandLetterTestData = {
     'payment-method': 'Payment can be made by bank transfer to Click Plumbing LLC 5501 Balcones Dr A141 Austin TX 78731, Routing: 091311229, Checking: 202511226605.'
 };
 
-// Format date for display
-function formatDemandLetterDate(date) {
-    if (!date) return '';
-    const d = new Date(date);
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
-}
-
 // Create the demand letter print view
 function createDemandLetterPrintView(form) {
     console.log('Creating demand letter print view...');
@@ -110,9 +102,8 @@ function createDemandLetterPrintView(form) {
         formValues[checkbox.name] = checkbox.checked ? 'on' : 'off';
     });
     
-    // Format the current date
-    const today = new Date();
-    const formattedToday = formatDemandLetterDate(today.toISOString().split('T')[0]);
+    // Letter "Date:" — use the user's local calendar day, not UTC from toISOString()
+    const formattedToday = formatDate(localDateStringYMD(new Date()));
     
     // Calculate outstanding balance with proper formatting
     const outstandingBalance = parseFloat(formValues['outstanding-balance']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -154,7 +145,7 @@ function createDemandLetterPrintView(form) {
             <h3>Details of Debt:</h3>
             <ul>
                 <li><strong>Service Provided:</strong> ${formValues['service-description']}</li>
-                <li><strong>Date of Completion:</strong> ${formatDemandLetterDate(formValues['completion-date'])}</li>
+                <li><strong>Date of Completion:</strong> ${formatDate(formValues['completion-date'])}</li>
                 <li><strong>Invoice Total:</strong> $${parseFloat(formValues['invoice-total']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</li>
                 <li><strong>Payments Received:</strong> $${parseFloat(formValues['payments-received']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</li>
                 <li><strong>Outstanding Balance:</strong> $${outstandingBalance}</li>
@@ -162,13 +153,13 @@ function createDemandLetterPrintView(form) {
         </div>
         
         <div style="margin-bottom: 1em; text-align: justify;">
-            You were invoiced on <strong>${formatDemandLetterDate(formValues['invoice-date'])}</strong> with payment due on <strong>${formatDemandLetterDate(formValues['due-date'])}</strong>. To date, we have made good-faith efforts to resolve this matter without escalation, including previous notices and attempts to contact you regarding the balance due.
+            You were invoiced on <strong>${formatDate(formValues['invoice-date'])}</strong> with payment due on <strong>${formatDate(formValues['due-date'])}</strong>. To date, we have made good-faith efforts to resolve this matter without escalation, including previous notices and attempts to contact you regarding the balance due.
         </div>
         
         <div>
             <h3>Demand</h3>
             <p>
-                Unless payment in full is received by <strong>${formatDemandLetterDate(formValues['payment-deadline'])}</strong>, we will pursue <strong>all legal remedies available</strong>, including but not limited to:
+                Unless payment in full is received by <strong>${formatDate(formValues['payment-deadline'])}</strong>, we will pursue <strong>all legal remedies available</strong>, including but not limited to:
             </p>
             <ul>
                 <li>Filing a <strong>theft of services report</strong> with local law enforcement under <strong>Texas Penal Code § 31.04</strong></li>

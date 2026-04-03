@@ -1,12 +1,6 @@
 // Function to format date for the mechanic's lien form
 function formatMechanicsLienDate(dateString) {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
+    return formatDateLongLocal(dateString);
 }
 
 // Create the mechanic's lien print view
@@ -66,7 +60,7 @@ function createMechanicsLienPrintView(form) {
     // Format dates
     const workStartDate = formatMechanicsLienDate(formValues['work-start']);
     const workEndDate = formatMechanicsLienDate(formValues['work-end']);
-    const today = formatMechanicsLienDate(new Date().toISOString().split('T')[0]);
+    const today = formatMechanicsLienDate(localDateStringYMD(new Date()));
     
     // Calculate amount due
     const totalAmount = parseFloat(formValues['contract-amount'] || 0);

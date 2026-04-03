@@ -1,12 +1,6 @@
 // Function to format date for the release of lien form
 function formatReleaseDate(dateString) {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
+    return formatDateLongLocal(dateString);
 }
 
 // Create the release of lien print view
@@ -63,9 +57,7 @@ function createReleasePrintView(form) {
         formValues[key] = value;
     });
     
-    // Format the current date
-    const today = new Date();
-    const formattedToday = formatReleaseDate(today.toISOString().split('T')[0]);
+    const formattedToday = formatReleaseDate(localDateStringYMD(new Date()));
     
     // Create a container for the letter content with proper styling
     const letterContainer = document.createElement('div');

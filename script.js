@@ -539,8 +539,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function formatDate(date) {
-    if (!date) return '';
-    const d = new Date(date);
+    const d = parseHtmlDateValue(date);
+    if (!d) return '';
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 }

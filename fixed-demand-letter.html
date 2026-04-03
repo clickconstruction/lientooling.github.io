@@ -209,6 +209,7 @@
         </div>
     </div>
     
+    <script src="date-utils.js"></script>
     <script>
         // Test data for the demand letter form
         const demandLetterTestData = {
@@ -278,25 +279,11 @@
                     formValues[key] = value;
                 });
                 
-                // Format dates
-                const invoiceDate = new Date(formValues['invoice-date']);
-                const dueDate = new Date(formValues['due-date']);
-                const paymentDeadline = new Date(formValues['payment-deadline']);
-                const completionDate = new Date(formValues['completion-date']);
-                
-                const formatDate = (date) => {
-                    return date.toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                    });
-                };
-                
                 // Create print content
                 printContent.innerHTML = `
                     <div style="padding: 20px; max-width: 800px; margin: 0 auto;">
                         <div style="text-align: right; margin-bottom: 2em;">
-                            ${formatDate(new Date())}
+                            ${formatDateLongLocal(new Date())}
                         </div>
                         
                         <div style="margin-bottom: 2em;">
@@ -315,13 +302,13 @@
                         
                         <div style="margin-bottom: 1em; text-align: justify;">
                             This letter serves as a final formal demand for payment in the amount of <strong>$${parseFloat(formValues['outstanding-balance']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong> 
-                            for services rendered. Our records indicate that Invoice #${formValues['invoice-number']} dated ${formatDate(invoiceDate)} 
-                            remains unpaid despite the payment due date of ${formatDate(dueDate)}.
+                            for services rendered. Our records indicate that Invoice #${formValues['invoice-number']} dated ${formatDateLongLocal(formValues['invoice-date'])} 
+                            remains unpaid despite the payment due date of ${formatDateLongLocal(formValues['due-date'])}.
                         </div>
                         
                         <div style="margin-bottom: 1em; text-align: justify;">
                             The services provided included: ${formValues['service-description']}. These services were performed during ${formValues['service-dates']} 
-                            and were completed on ${formatDate(completionDate)}.
+                            and were completed on ${formatDateLongLocal(formValues['completion-date'])}.
                         </div>
                         
                         <div style="margin-bottom: 1em; text-align: justify;">
@@ -337,7 +324,7 @@
                         ` : ''}
                         
                         <div style="margin-bottom: 1em; text-align: justify;">
-                            Please remit payment in full by <strong>${formatDate(paymentDeadline)}</strong>. ${formValues['payment-method']}
+                            Please remit payment in full by <strong>${formatDateLongLocal(formValues['payment-deadline'])}</strong>. ${formValues['payment-method']}
                         </div>
                         
                         <div style="margin-bottom: 2em; text-align: justify;">

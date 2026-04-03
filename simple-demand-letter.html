@@ -80,6 +80,7 @@
         </div>
     </div>
     
+    <script src="date-utils.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('simple-demand-letter-form');
@@ -99,13 +100,7 @@
                     formValues[key] = value;
                 });
                 
-                // Format date
-                const dueDate = new Date(formValues['due-date']);
-                const formattedDueDate = dueDate.toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                });
+                const formattedDueDate = formatDateLongLocal(formValues['due-date']);
                 
                 // Create print content
                 printContent.innerHTML = `

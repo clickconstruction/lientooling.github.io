@@ -194,6 +194,7 @@
         </div>
     </div>
 
+    <script src="date-utils.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Get elements
@@ -254,22 +255,7 @@
                     formValues[key] = value;
                 }
                 
-                // Format dates
-                const formatDate = (dateString) => {
-                    if (!dateString) return '';
-                    const date = new Date(dateString);
-                    return date.toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-                };
-                
-                const today = new Date().toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
+                const today = formatDateLongLocal(new Date());
                 
                 // Get checkbox values
                 const includeLateFeesChecked = document.getElementById('include-late-fees').checked;
@@ -298,13 +284,13 @@
                         
                         <div style="margin-bottom: 1em; text-align: justify;">
                             This letter serves as a final formal demand for payment in the amount of <strong>$${parseFloat(formValues['outstanding-balance']).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong> 
-                            for services rendered. Our records indicate that Invoice #${formValues['invoice-number']} dated ${formatDate(formValues['invoice-date'])} 
-                            remains unpaid despite the payment due date of ${formatDate(formValues['due-date'])}.
+                            for services rendered. Our records indicate that Invoice #${formValues['invoice-number']} dated ${formatDateLongLocal(formValues['invoice-date'])} 
+                            remains unpaid despite the payment due date of ${formatDateLongLocal(formValues['due-date'])}.
                         </div>
                         
                         <div style="margin-bottom: 1em; text-align: justify;">
                             The services provided included: ${formValues['service-description']}. These services were performed during ${formValues['service-dates']} 
-                            and were completed on ${formatDate(formValues['completion-date'])}.
+                            and were completed on ${formatDateLongLocal(formValues['completion-date'])}.
                         </div>
                         
                         <div style="margin-bottom: 1em; text-align: justify;">
@@ -320,7 +306,7 @@
                         ` : ''}
                         
                         <div style="margin-bottom: 1em; text-align: justify;">
-                            Please remit payment in full by <strong>${formatDate(formValues['payment-deadline'])}</strong>. ${formValues['payment-method']}
+                            Please remit payment in full by <strong>${formatDateLongLocal(formValues['payment-deadline'])}</strong>. ${formValues['payment-method']}
                         </div>
                         
                         <div style="margin-bottom: 2em; text-align: justify;">
