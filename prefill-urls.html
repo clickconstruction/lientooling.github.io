@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-filled URLs — Lien Tooling</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container mt-4 mb-5">
+        <h1 class="text-center mb-2">Lien Tooling</h1>
+        <div class="d-flex justify-content-center mb-4">
+            <nav class="nav nav-pills flex-wrap justify-content-center gap-1">
+                <a class="nav-link" href="rules-for-texas.html">Rules for Texas</a>
+                <a class="nav-link" href="demand-letter.html">Demand Letter</a>
+                <a class="nav-link" href="mechanics-lien.html">Mechanic's Lien</a>
+                <a class="nav-link" href="release-lien.html">Release of Lien</a>
+                <a class="nav-link active" href="prefill-urls.html" aria-current="page">Pre-filled URLs</a>
+            </nav>
+        </div>
+
+        <h2 class="text-center mb-4">Pre-filled URLs (for developers and integrations)</h2>
+
+        <p class="lead text-center mx-auto" style="max-width: 42rem;">
+            This page describes how to build links that open a form with fields already filled in.
+            Each form lives on its own page; use the correct path and field names below.
+        </p>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h3 class="card-title h5">Pages and form IDs</h3>
+                <ul class="mb-0">
+                    <li><code>demand-letter.html</code> — form id <code>demand-letter</code></li>
+                    <li><code>mechanics-lien.html</code> — form id <code>mechanics-lien</code></li>
+                    <li><code>release-lien.html</code> — form id <code>release-lien</code></li>
+                </ul>
+                <p class="mb-0 mt-2 small text-muted">Production URLs use <code>https://lientooling.com</code> as the origin.</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h3 class="card-title h5">1. Shallow prefill (query string)</h3>
+                <p>Append query parameters whose names match the exact HTML <code>name</code> attribute of each field. Values should be URL-encoded (e.g. spaces as <code>%20</code>).</p>
+                <pre class="bg-light p-3 rounded small mb-3"><code>https://lientooling.com/demand-letter.html?client-name=Jane%20Doe&amp;invoice-number=INV-001</code></pre>
+                <p class="mb-0"><strong>Limits:</strong> Browsers and proxies cap URL length. Shallow links work well for a few short fields. Long text (legal descriptions, payment instructions) belongs in the hash payload below.</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h3 class="card-title h5">2. Full state (URL hash)</h3>
+                <p>Put a single payload in the fragment after <code>#d=</code>:</p>
+                <pre class="bg-light p-3 rounded small mb-3"><code>https://lientooling.com/&lt;page&gt;.html#d=&lt;base64url(JSON)&gt;</code></pre>
+                <p class="small text-muted mb-0">Example path: <code>demand-letter.html</code>, <code>mechanics-lien.html</code>, or <code>release-lien.html</code>.</p>
+                <p>The JSON object maps each field <code>name</code> to a value:</p>
+                <ul>
+                    <li>Text, email, tel, number, date, and textarea fields → JSON strings (dates as <code>YYYY-MM-DD</code>).</li>
+                    <li>Checkboxes on the demand letter (<code>include-late-fees</code>, <code>include-notarial</code>) → JSON booleans <code>true</code> / <code>false</code>.</li>
+                </ul>
+                <p class="mb-2"><strong>Encoding steps:</strong></p>
+                <ol class="mb-3">
+                    <li>Serialize the object as UTF-8 JSON.</li>
+                    <li>Base64-encode the UTF-8 bytes, then make it URL-safe: use <code>-</code> instead of <code>+</code>, <code>_</code> instead of <code>/</code>, and remove <code>=</code> padding.</li>
+                </ol>
+                <p class="mb-0"><strong>Easiest path:</strong> On each form page, use the <strong>Copy shareable link</strong> button to generate a correct <code>#d=</code> link from the current field values.</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h3 class="card-title h5">3. Merge order and drafts</h3>
+                <ul class="mb-0">
+                    <li>If both query parameters and <code>#d=</code> are present, the page applies <strong>query first</strong>, then the hash object. The hash <strong>wins</strong> on duplicate keys.</li>
+                    <li>Unknown query keys are ignored.</li>
+                    <li>Drafts in <code>localStorage</code> (keys like <code>lienToolingDraft:demand-letter</code>) are <strong>not</strong> restored when the URL includes any recognized query field or a non-empty <code>#d=</code> payload—the link takes precedence.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h3 class="card-title h5">4. Privacy</h3>
+                <p class="mb-0">Query strings may be logged by servers, analytics, or sent in the <code>Referer</code> header when users navigate away. The hash is not sent to the server on the initial page load, but anyone with the full URL can read it. Treat shared links like sensitive documents.</p>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h3 class="card-title h5">5. Field reference (parameter names)</h3>
+                <p class="small text-muted">Use these strings exactly as query keys or JSON keys.</p>
+
+                <h4 class="h6 mt-3">demand-letter.html</h4>
+                <p class="small font-monospace mb-2">business-name, sender-name, business-address, business-city, business-state, business-zip, business-phone, business-email, client-name, client-address, client-city, client-state, client-zip, invoice-number, invoice-date, due-date, payment-deadline, service-description, service-dates, completion-date, invoice-total, payments-received, outstanding-balance, include-late-fees, include-notarial, payment-method</p>
+                <p class="small mb-3"><strong>Example:</strong> <code>https://lientooling.com/demand-letter.html?client-name=Acme&amp;invoice-number=INV-100</code></p>
+
+                <h4 class="h6 mt-3">mechanics-lien.html</h4>
+                <p class="small font-monospace mb-2">claimant-name, company-name, claimant-address, claimant-city, claimant-state, claimant-zip, owner-name, owner-address, owner-city, owner-state, owner-zip, property-address, property-city, property-state, property-zip, property-county, legal-description, work-description, work-start, work-end, unpaid-amount, customer-name, notice-date, contractor-name, contractor-address, contractor-city, contractor-state, contractor-zip</p>
+                <p class="small mb-3"><strong>Example:</strong> <code>https://lientooling.com/mechanics-lien.html?property-county=Travis&amp;customer-name=Acme%20LLC</code></p>
+
+                <h4 class="h6 mt-3">release-lien.html</h4>
+                <p class="small font-monospace mb-0">lien-reference, payment-date, claimant-name, company-name, claimant-address, claimant-city, claimant-state, claimant-zip, filing-date, property-description, owner-name, property-county, property-address, property-city, property-state, property-zip</p>
+                <p class="small mt-2 mb-0"><strong>Example:</strong> <code>https://lientooling.com/release-lien.html?lien-reference=ML-2025-001&amp;owner-name=Jane%20Doe</code></p>
+            </div>
+        </div>
+
+        <p class="text-center mb-0">
+            <a href="index.html" class="btn btn-outline-secondary">Back to home</a>
+        </p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

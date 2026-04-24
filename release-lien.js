@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Fill claimant information
             document.querySelector('input[name="claimant-name"]').value = 'John Smith';
-            document.querySelector('input[name="business-name"]').value = 'Smith Construction LLC';
+            document.querySelector('input[name="company-name"]').value = 'Smith Construction LLC';
             document.querySelector('input[name="claimant-address"]').value = '123 Main St';
             document.querySelector('input[name="claimant-city"]').value = 'Austin';
             document.querySelector('input[name="claimant-state"]').value = 'TX';

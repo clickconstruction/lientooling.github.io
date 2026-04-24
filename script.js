@@ -137,6 +137,10 @@ document.addEventListener('DOMContentLoaded', function() {
     } else if (currentPage === 'demand-letter.html') {
         currentFormId = 'demand-letter';
     }
+
+    if (currentFormId && window.LienToolingFormState) {
+        window.LienToolingFormState.initFormPage(currentFormId);
+    }
     
     // Add event listener for the test data button
     const testDataBtn = document.getElementById('test-data-btn');

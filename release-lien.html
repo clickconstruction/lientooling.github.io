@@ -19,14 +19,16 @@
     <div class="container mt-4">
         <h1 class="text-center mb-2 no-print">Lien Tooling</h1>
         <div class="d-flex justify-content-center mb-4 no-print">
-            <nav class="nav nav-pills">
+            <nav class="nav nav-pills flex-wrap justify-content-center gap-1">
                 <a class="nav-link" href="rules-for-texas.html">Rules for Texas</a>
                 <a class="nav-link" href="demand-letter.html">Demand Letter</a>
                 <a class="nav-link" href="mechanics-lien.html">Mechanic's Lien</a>
                 <a class="nav-link active" href="release-lien.html">Release of Lien</a>
+                <a class="nav-link" href="prefill-urls.html">Pre-filled URLs</a>
             </nav>
         </div>
-        <div class="d-flex justify-content-end mb-4 no-print">
+        <div class="d-flex justify-content-end gap-2 mb-4 no-print">
+            <button type="button" class="btn btn-outline-secondary" id="copy-share-link-btn">Copy shareable link</button>
             <button type="button" class="btn btn-outline-primary" id="test-data-btn">Fill Test Data</button>
         </div>
 
@@ -135,7 +137,6 @@
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button type="button" id="test-data-btn" class="btn btn-secondary me-2">Fill Test Data</button>
                 <button type="submit" class="btn btn-primary">Generate PDF</button>
             </div>
         </form>
@@ -146,6 +147,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="date-utils.js"></script>
+    <script src="form-url-state.js"></script>
     <script src="script.js"></script>
     <script src="release-lien.js"></script>
 </body>
