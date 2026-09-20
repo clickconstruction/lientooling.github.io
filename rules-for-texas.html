@@ -9,6 +9,7 @@
     <link rel="apple-touch-icon" href="icons/apple-touch-180.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="site.css">
     <style>
         .timeline-item {
             padding: 10px 0;
@@ -36,18 +37,21 @@
 </head>
 <body>
     <div class="container mt-4">
-        <div class="d-flex justify-content-end mb-1 no-print">
-            <a href="prefill-urls.html" class="btn btn-sm btn-outline-secondary">Developers</a>
-        </div>
-        <h1 class="text-center mb-2 no-print">Lien Tooling</h1>
-        <div class="d-flex justify-content-center mb-4 no-print">
-            <nav class="nav nav-pills flex-wrap justify-content-center gap-1">
-                <a class="nav-link active" href="rules-for-texas.html">Rules for Texas</a>
-                <a class="nav-link" href="demand-letter.html">Demand Letter</a>
-                <a class="nav-link" href="mechanics-lien.html">Mechanic's Lien</a>
-                <a class="nav-link" href="release-lien.html">Release of Lien</a>
-            </nav>
-        </div>
+        <header class="site-header no-print">
+            <a class="site-brand" href="index.html">
+                <img class="site-mark" src="icons/favicon.svg" alt="" width="40" height="40">
+                <span class="site-title"><span class="site-name">LienTooling</span><span class="site-tag">Texas lien paperwork for contractors · Click Plumbing and Electrical</span></span>
+            </a>
+            <div class="site-header-actions"><a class="site-quiet" href="prefill-urls.html">Prefill links</a></div>
+        </header>
+        <nav class="site-steps no-print" aria-label="Documents">
+            <a class="site-step" href="index.html">Home</a>
+            <a class="site-step" href="demand-letter.html"><b>1</b> Demand letter</a>
+            <a class="site-step" href="mechanics-lien.html"><b>2</b> Mechanic's lien</a>
+            <a class="site-step" href="release-lien.html"><b>3</b> Release of lien</a>
+            <span class="site-step-gap"></span>
+            <a class="site-step is-current" aria-current="page" href="rules-for-texas.html">Rules for Texas</a>
+        </nav>
         <h2 class="text-center mb-4">Rules for Texas</h2>
         
         <div class="card mb-4">

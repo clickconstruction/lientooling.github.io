@@ -1,0 +1,62 @@
+/* LienTooling's shell: the Tooling family's ink and yellow, the header, the step nav, the home
+   page. Screen only — what prints is print-styles.css and each document's own markup. */
+:root { --ink: #161617; --yellow: #e8c547; --paper: #f6f5f1; --line: #e2dfd6; --muted: #6b6a66; }
+
+@media screen {
+  body { background-color: var(--paper); color: #2b2a28; }
+  .card { border: 1px solid var(--line); border-radius: 12px; box-shadow: none; }
+  h2, h3, h4 { color: var(--ink); }
+  a { color: #5c4a00; }
+
+  .btn-primary { background-color: var(--ink); border-color: var(--ink); color: var(--yellow); font-weight: 600; }
+  .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .btn-primary:first-child:active { background-color: #2a2a2c; border-color: #2a2a2c; color: var(--yellow); }
+  .btn-outline-primary, .btn-outline-secondary { background-color: #fff; border-color: #cfccc2; color: var(--ink); }
+  .btn-outline-primary:hover, .btn-outline-secondary:hover, .btn-outline-primary:focus, .btn-outline-secondary:focus, .btn-outline-primary:active, .btn-outline-secondary:active, .btn-outline-primary:first-child:active, .btn-outline-secondary:first-child:active { background-color: var(--paper); border-color: #a9a69b; color: var(--ink); }
+  .btn-secondary { background-color: #fff; border-color: #cfccc2; color: var(--ink); }
+  .btn-secondary:hover { background-color: var(--paper); border-color: #a9a69b; color: var(--ink); }
+  .form-control:focus, .form-select:focus, .form-check-input:focus { border-color: #b89b1f; box-shadow: 0 0 0 0.2rem rgba(232, 197, 71, 0.45); }
+  .form-check-input:checked { background-color: var(--ink); border-color: var(--ink); }
+
+  .site-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; padding: 0.75rem 1rem; background: var(--ink); color: #fff; border-radius: 10px; }
+  .site-brand { display: flex; align-items: center; gap: 0.75rem; min-width: 0; color: inherit; text-decoration: none; }
+  .site-brand:hover { color: inherit; }
+  .site-mark { width: 40px; height: 40px; border-radius: 9px; flex-shrink: 0; }
+  .site-title { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+  .site-name { font-size: 1.125rem; font-weight: 700; }
+  .site-tag { font-size: 0.8125rem; color: #bdbbb3; }
+  .site-header-actions { margin-left: auto; display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end; }
+  .site-quiet { padding: 0.4rem 0.8rem; font-size: 0.875rem; font-weight: 500; color: #ecebe4; background: transparent; border: 1px solid #4a4a4d; border-radius: 8px; text-decoration: none; white-space: nowrap; }
+  .site-quiet:hover { background: #2a2a2c; color: #fff; }
+
+  /* The documents in the order the law runs them; it rides along under the header. */
+  .site-steps { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; margin: 0 0 1.5rem; padding: 0.5rem 0.75rem; background: #fff; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
+  .site-step { padding: 0.3rem 0.75rem; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--muted); font-size: 0.875rem; text-decoration: none; white-space: nowrap; }
+  .site-step b { font-weight: 700; margin-right: 0.15rem; }
+  .site-step:hover { border-color: #b9b6aa; color: var(--ink); }
+  .site-step.is-current { background: var(--ink); border-color: var(--ink); color: var(--yellow); font-weight: 600; }
+  .site-step-gap { flex: 1; }
+
+  .home-hero { padding: 1.5rem 0.25rem 0.5rem; }
+  .home-hero h1 { margin: 0 0 0.5rem; font-size: 2rem; font-weight: 700; color: var(--ink); }
+  .home-hero p { margin: 0; max-width: 62ch; color: var(--muted); font-size: 1.0625rem; }
+  .home-doors { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .home-door { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.125rem; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+  .home-door-when { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #7a6200; }
+  .home-door h2 { margin: 0; font-size: 1.125rem; font-weight: 700; }
+  .home-door p { margin: 0; flex: 1; color: var(--muted); font-size: 0.9375rem; }
+  .home-door .btn { align-self: flex-start; }
+  .home-rules { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin: 0 0 1.5rem; padding: 1rem 1.125rem; background: var(--ink); color: #fff; border-radius: 12px; }
+  .home-rules strong { color: var(--yellow); white-space: nowrap; }
+  .home-rules span { flex: 1; min-width: 16rem; color: #c9c7bf; font-size: 0.9375rem; }
+  .home-rules .btn { background: var(--yellow); border-color: var(--yellow); color: var(--ink); font-weight: 600; }
+  .home-rules .btn:hover { background: #f0d261; border-color: #f0d261; color: var(--ink); }
+  .home-note { color: var(--muted); font-size: 0.9375rem; max-width: 70ch; }
+
+  @media (max-width: 768px) {
+    .home-doors { grid-template-columns: 1fr; }
+    .site-tag { display: none; }
+    .site-steps { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .site-steps::-webkit-scrollbar { display: none; }
+    .site-step-gap { display: none; }
+  }
+}
