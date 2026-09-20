@@ -41,6 +41,18 @@
   .business-profile-forget { color: var(--muted); text-decoration: none; }
   .business-profile-forget:hover { color: #b3261e; }
 
+  /* The document beside the form (live-preview.js). The form and #print-view stay direct
+     children of .container — print-styles.css hides every other child of it when printing. */
+  .lt-missing { color: #b3261e; background: #fdecea; border-radius: 2px; padding: 0 2px; }
+  .lt-status { margin: 0 0 0.75rem; padding: 0.4rem 0.7rem; border-radius: 8px; background: #fdf3d0; color: #5c4a00; font: 500 0.8125rem/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif; }
+  .lt-status.is-ready { background: #e4f3e8; color: #1f5a36; }
+  @media (min-width: 1100px) {
+    .container.lt-live { max-width: 1440px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 1.5rem; align-items: start; }
+    .container.lt-live > * { grid-column: 1 / -1; }
+    .container.lt-live > form { grid-column: 1; }
+    .container.lt-live > #print-view { grid-column: 2; position: sticky; top: 4.5rem; max-height: calc(100vh - 5.5rem); overflow: auto; margin-top: 0 !important; }
+  }
+
   .home-hero { padding: 1.5rem 0.25rem 0.5rem; }
   .home-hero h1 { margin: 0 0 0.5rem; font-size: 2rem; font-weight: 700; color: var(--ink); }
   .home-hero p { margin: 0; max-width: 62ch; color: var(--muted); font-size: 1.0625rem; }
