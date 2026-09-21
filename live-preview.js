@@ -113,9 +113,24 @@
         // matching for as long as the print preview is open (Chrome fires the change). Taking
         // that for a narrow screen hid the document mid-print and the preview came out blank.
         // While printing nothing here changes; the layout is judged again once the dialog closes.
+        // On a narrow screen the document exists only after Generate, and nothing but the
+        // document prints, so Cmd+P before Generate printed a blank sheet. Now printing makes
+        // the document from the form as it stands, and afterwards the form comes back as it was.
         var printing = false;
-        global.addEventListener('beforeprint', function () { printing = true; });
-        global.addEventListener('afterprint', function () { printing = false; onChange(); });
+        var madeForPrint = false;
+        global.addEventListener('beforeprint', function () {
+            printing = true;
+            if (live || view.style.display === 'block') return;
+            view.scrollIntoView = function () {};
+            try { generate(form); } catch (e) { return; }
+            markMissing(view);
+            madeForPrint = true;
+        });
+        global.addEventListener('afterprint', function () {
+            printing = false;
+            if (madeForPrint) { madeForPrint = false; view.style.display = 'none'; form.style.display = ''; }
+            onChange();
+        });
         var onChange = function () {
             if (printing || global.matchMedia('print').matches) return;
             if (mq.matches === live) return;
