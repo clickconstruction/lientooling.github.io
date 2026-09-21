@@ -109,7 +109,15 @@
             }, 0);
         });
 
+        // Printing lays the page out at paper width, narrower than WIDE, so the query stops
+        // matching for as long as the print preview is open (Chrome fires the change). Taking
+        // that for a narrow screen hid the document mid-print and the preview came out blank.
+        // While printing nothing here changes; the layout is judged again once the dialog closes.
+        var printing = false;
+        global.addEventListener('beforeprint', function () { printing = true; });
+        global.addEventListener('afterprint', function () { printing = false; onChange(); });
         var onChange = function () {
+            if (printing || global.matchMedia('print').matches) return;
             if (mq.matches === live) return;
             if (!mq.matches) { view.style.display = 'none'; form.style.display = ''; }
             setLive(mq.matches);
